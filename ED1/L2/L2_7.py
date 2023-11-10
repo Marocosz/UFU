@@ -9,10 +9,7 @@ def gerador_pascal_matriz(n):
     triangulo = []
 
     for linha_index in range(n):
-        valor = []
-        for coluna_index in range(linha_index + 1):
-            valor.append(pascal(linha_index, coluna_index))
-        
+        valor = [pascal(linha_index, coluna_index) for coluna_index in range(linha_index + 1)]
         triangulo.append(valor)
 
     return triangulo
