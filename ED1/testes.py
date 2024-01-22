@@ -1,3 +1,7 @@
-a = lambda x: x*5
+M = [0]*3
+for i in range(3):
+    M[i] = [0]*2
 
-print(a(50))
+print(M)
+
+M1 = 
