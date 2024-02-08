@@ -1,0 +1,233 @@
+=========================================================
+Lista de Exercícios 01
+=========================================================
+
+```{r}
+# 1
+# A) 0,500000
+
+# B) 0,328946  # Interseção --> Basta fazer subtração
+
+# C) 0,482977 --> Usar a fórmula do "tal que" sendo a probabilidade do divisor é a complementar
+
+
+# 2
+# A)
+qexp(0.201, 1/100) # 22.43943 --> Quando o exercício nos dá a probabilidade (porcentagem) usamos o quantil
+
+# B)
+pexp(23, 1/100) + pexp(63, 1/100, lower.tail = FALSE) # 0.7380582
+1 - (pexp(63, 1/100) - pexp(23, 1/100))
+
+# 3
+# A)
+qnorm(0.0705, 961.4, 18.33, lower.tail = FALSE) # Usar o y da esquerda (complementar) visto que o exercício pede o maior
+
+# B)
+qnorm(0.643, 961.4, 18.33, lower.tail = FALSE)
+
+# C)
+pnorm(1000, 961.4, 18.33, lower.tail = FALSE) # Como é que transborda (maior) usamos o complementar
+
+```
+
+
+==========================================================
+Exercícios Revisão 01
+==========================================================
+
+
+Exercício 01
+```{r}
+# a)
+1-(1/(1 + exp(-2)))
+
+# b)
+(1/(1 + exp(-1))) - (1/(1 + exp(1)))
+
+# c)
+-log(0.4/0.6)  # Substituir na fórmula
+
+# d)
+(1/(1 + exp(2))) + (1 - (1/(1 + exp(-2))))
+
+# e)
+(1/(1 + exp(-2)))/(1/(1 + exp(-3)))
+
+# f)
+# 0.7 / 0.3
+-log(0.7/0.3)
+```
+
+Exercício 02
+```{r}
+# a)
+(1 - (1-(10000/(200+100)**2))) # Como é pelo menos, tem que ter MAIS de 200 dias
+
+# b)
+(1-(10000/(120+100)**2)) - (1-(10000/(80+100)**2))
+
+# c)
+sqrt(100000) - 100
+
+# d)
+sqrt(10000/0.9) - 100  # Como 90% ainda estão dentro da validade, oque eu quero é os 10% que não estão, assim uso 0,1
+```
+Exercício 03
+```{r}
+# a)
+(0.25*1**2) # Quando X é menor que 0, usamos 0
+
+# b)
+(0.25*0.5**2) + (1-(1))
+
+# c)
+sqrt(0.81/0.25)  # Não sei
+
+# d)
+(0.25*0.2**2)/(0.25*0.5**2)
+
+```
+
+Exercício 04
+```{r}
+# a)
+pnorm(26, 25, 2.1, lower.tail = FALSE) + pnorm(22, 25, 2.1)
+
+# b)
+qnorm(0.9, 25, 2.1, lower.tail = FALSE)
+
+# c)
+qnorm(0.2, 25, 2.1)
+```
+
+Exercício 05
+```{r}
+# a)
+qnorm(0.15, 24, 2.2, lower.tail = FALSE)
+
+# b)
+qnorm(0.85, 24, 2.2, lower.tail = FALSE)
+
+# c)
+qnorm(0.25, 24, 2.2)
+```
+
+Exercicío 06
+```{r}
+# a)
+pnorm(24, 30, 6.5, lower.tail = FALSE)
+
+# b)
+qnorm(0.95, 30, 6.5, lower.tail = FALSE)
+
+# c)
+qnorm(0.025, 30, 6.5)  # Da esquerda
+qnorm(0.024, 30, 6.5, lower.tail = FALSE) # Da direita
+```
+
+Exercício 07
+```{r}
+# a)
+qnorm(0.02, 24, 4.5)
+
+# b)
+pnorm(30, 24, 4.5) - pnorm(20, 24, 4.5)
+
+# c)
+qnorm(0.05, 24, 4.5)
+qnorm(0.05, 24, 4.5, lower.tail = FALSE)
+```
+
+Exercício 08
+```{r}
+# a)
+pnorm(120, 100, 15)
+
+# b)
+qnorm(1/6, 100, 15)
+
+# c)
+qnorm(0.02, 100, 15, lower.tail = FALSE)
+
+# d)
+qnorm(0.045, 100, 15)
+qnorm(0.045, 100, 15, lower.tail = FALSE)
+```
+
+Exercício 09
+```{r}
+# a)
+pnorm(1050, 1000, 22.5) - pnorm(980, 1000, 22.5)
+
+# b)
+qnorm(0.95, 1000, 22.5)
+
+# c)
+qnorm(0.02, 1000, 22.5)
+```
+
+Exercício 10
+```{r}
+# a)
+pnorm(36, 30, 2.75) - pnorm(24, 30, 2.75)
+
+# b)
+pnorm(24, 30, 2.75) + pnorm(36, 30, 2.75, lower.tail = FALSE)
+```
+
+Exercício 11
+```{r}
+pexp(100, 1/400)
+```
+
+Exercício 12
+```{r}
+# a)
+pexp(60000, 1/(5*10**4)) - pexp(40000, 1/(5*10**4))
+
+# b)
+pexp(10000, 1/(5*10**4)) + pexp(90000, 1/(5*10**4), lower.tail = FALSE)
+
+# c)
+qexp(0.75, 1/(5*10**4))
+```
+
+Exercício 13
+```{r}
+# a)
+qexp(0.1, 1/15)
+
+
+# b)
+qexp(0.1, 1/15, lower.tail = FALSE)
+```
+Exercício 14
+```{r}
+# a)
+qexp(1/4, 1/50000, lower.tail = FALSE)
+
+# b)
+qexp(0.95, 1/50000)
+
+# c)
+pexp(50000, 1/50000, lower.tail = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

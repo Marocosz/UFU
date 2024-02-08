@@ -1,0 +1,234 @@
+================================================================================
+## Aula 18/01
+================================================================================
+
+## Probabilidade Exponencial
+
+dexp ----> densidade 
+pexp ----> distribuição acumulada
+qexp ----> quantil (distribuição acumulada inversa)
+
+
+# Parâmetros
+
+para dexp e pexp: (X, 1/Lambda(media))
+para qexp: (probabilidade, Lambda)
+
+# Funções
+
+pexp e qexp: lower.tail --> Se "TRUE" (Padrão): P(X <= x) Se "FALSE": P(X > x) complementar
+
+# Exercício 04
+```{r}
+# A)
+pexp(500, 0.0005)
+
+# B)
+pexp(2000, 0.0005, lower = FALSE)
+
+# C)
+qexp(0.5, 0.0005)
+
+# D)
+qexp(0.1, 0.0005, lower = FALSE)
+qexp(0.9, 0.0005)
+```
+
+# Exercício 05
+```{r}
+# A)
+pexp(0.5 ,1/4)
+
+# B)
+# P(x <= 3,5 | x > 3) = P[(x <= 3) interseção (x > 3)] / P(x > 3)
+# OBS: Quando falamos <=, em números contínuos, isso não é diferente de < apenas
+(pexp(3.5, 1/4) - pexp(3, 1/4))/pexp(3, 1/4, lower = FALSE) # 0.1175031
+```
+
+# Exercício 06
+```{r}
+# A)
+# Por Poisson -> Y = n° buracos por km, lambda = 2 (não precisa ser 1/2 visto que está em Poisson)
+# X = distância entre os buracos (exponencial)
+# P(1 <= x <= 2) =
+pexp(2, 2) - pexp(1, 2) # 0.1170196
+
+# B)
+# Poderia ser feito em Poisson, mas usaremos o pensamento Exponencial
+# Usando a lógica: Para haver pelo menos um buraco em uma distância de 3km, a distância deverá ser menor que 3km -> P(x <= 3)
+pexp(3,2) # 0.9975212  
+
+# C)
+# Haverá pelo menos um buraco em D km se e somente se a distância até o 1° seja menor ou igual a D km
+qexp(0.95, 2)
+pexp(1.497866, 2)
+```
+
+```{r}
+# Exercício 07
+# A)
+# OBS: Poderíamos fazer por Poisson mudando o lambda para 30
+# X = tempo entre chamadas = exponencial
+# Mi'x = 10 min por chamada -> logo, lambda = 1/10 chamadas por min
+# Não haverá chamadas em 30 minutos se e somente se o tempo até a 1° chamada, exceda 30 minutos
+# P(x > 30) =
+pexp(30, 1/10, lower = FALSE) # 0.04978707
+
+# B)
+t = qexp(0.01, 1/10, lower = FALSE)
+t # 46.0517
+```
+
+================================================================================
+## Aula 25/01
+================================================================================
+
+
+Mi = Média
+Sigma (Desvio Padrão) = Dispersão
+OBS: Em gráficos simétricos, a média e a mediana são iguais
+
+O parãmetro "Mi" serve para "andar" com o gráfico sobre o eixo X
+O parâmetro "Sigma" serve para determinar a altura do gráfico, e quanto mais alta, mais fina, mais baixa, mais larga
+
+
+# Construindo uma distribuição normal
+
+Dnorm ----> Densidade
+Pnorm ----> Distribuição
+Qnorm ----> Quantil
+
+
+# Parâmetros
+
+Dnorm e Pnorm: (X, Mi, Sigma)
+Qnorm: (Probabilidae, Mi, Sigma)
+
+# Funções
+
+Pnorm e Qnorm: lower.tail --> Se "TRUE" (Padrão): P(X <= x) Se "FALSE": P(X > x) complementar
+OBS: Se não colocarmos nada em Mi e Sigma, o padrão é 0 e 1 (Normal Padrão)
+
+
+## Exercício 08
+```{r}
+# A)
+# Probabilidade de Z ser menor ou igual a 0.8
+round(pnorm(0.8, 0, 1), 6)
+
+# B)
+# Probabilidade de Z ser maior que 0.8
+round(pnorm(0.8, 0, 1, lower.tail=FALSE), 6)
+
+# C)
+# Probabiliadde de Z ser maior que -0.8
+round(pnorm(-0.8, 0, 1, lower.tail=FALSE), 6)
+
+# D)
+# Probabilidade de Z ser menor ou igual a -0.8
+round(pnorm(-0.8, 0, 1), 6)
+
+# E)
+# Probabilidade de Z ser menor ou igual a 0.8 e maior ou igual -0.8
+round(pnorm(0.8) - pnorm(-0.8), 6)
+
+# F)
+# O y tal que a Probabilidade de Z menor ou igual a y seja 0.95 (Usar quantil)
+round(qnorm(0.95, 0, 1), 4)
+
+# G)
+# O y tal que a probabilidade de Z maior que y seja 0.99 
+round(qnorm(0.99, 0, 1, lower.tail=FALSE), 4)
+
+# H)
+# O y tal que a probabilidade de z <= que y e >= -y seja 0.9
+round(qnorm(0.95), 4)
+# Usamos a lógica de que como são proporcionais, achamos o valor de um y como fazemos normalmente, depois de deduzir a Probabilidade
+```
+
+## Exercício 09
+```{r}
+# X = volume 
+# Mi = 1000 ml
+# Sigma = 50 ml (Desvio Padrão)
+
+# A)
+# P(X > 1100)
+pnorm(1100, 1000, 50, lower.tail=FALSE)
+
+# B)
+# P(X < 950)
+pnorm(950, 1000, 50)
+
+# C)
+# P(950 =< X =< 1100)
+pnorm(1100, 1000, 50) - pnorm(950, 1000, 50)
+
+# D)
+# 95% das garrafas, simetricamente faltando 0,025 de cada lado
+qnorm(0.025, 1000, 50) # y  da esquerda
+qnorm(0.025, 1000, 50, lower.tail=FALSE) # y da direita
+```
+
+## Execício 10
+```{r}
+# X = tempo de ida
+# Mi = 24 min
+# Sigma = 3,8 min
+
+# A)
+# P(x <= 30)
+pnorm(30, 24, 3.8)
+
+# B)
+# Ele tem 15 minutos para chegar no horario, logo chegará atrasado sendo X > 15
+pnorm(15, 24, 3.8, lower.tail=FALSE)
+
+# C)
+qnorm(0.85, 24, 3.8)
+```
+
+## Exercício 11
+```{r}
+# X = Tempo de vida
+# Mi = 400 hrs
+# Sigma = 100 hrs
+
+# A)
+# O tempo onde 25% dos componentes ja falharam
+qnorm(0.25, 400, 100)
+
+# B)
+# P(X < 400 | X > 250)
+(pnorm(400, 400, 100) - pnorm(250, 400, 100))/pnorm(250, 400, 100, lower.tail = FALSE)
+```
+
+
+================================================================================
+## Aula 01/02
+================================================================================
+
+# Combinações Lineares
+
+```{r}
+pnorm(3.3, 3, sqrt(0.02), lower.tail = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
