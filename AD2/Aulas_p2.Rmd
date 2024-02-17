@@ -2,3 +2,39 @@
 ## Aula 08/02
 ================================================================================
 
+
+================================================================================
+## Aula 15/02
+================================================================================
+
+Exercício 01 - PDF Inferência Parte 2
+```{r}
+# C)
+pnorm(qnorm(0.95)-1000*sqrt(50)/3600)
+
+# D)
+cbind(50:100, pnorm(qnorm(0.95)-1000*sqrt(c(50:100))/3600))
+# Por tentativa e erro, o menor tamanho de amostra pra se obter um erro do tipo II inferior a 0,25 é 70
+```
+
+Exercício 02 - PDF Inferência Parte 2
+```{r}
+# A)
+39+qnorm(0.005)*2/sqrt(10)
+39+qnorm(0.995)*2/sqrt(10)
+# Ou seja "mi" está entre 37 e 40
+
+# B)
+(39-40)*sqrt(10)/2
+pnorm(-1.581139) + pnorm(abs(-1.581139), lower=FALSE)
+# Falha em rejeitar H0, ou seja, não há evidências que "mi" != 40
+
+# C)
+pnorm(qnorm(0.995)-1.75*sqrt(10)/2) - pnorm(qnorm(0.005)-1.75*sqrt(10)/2)
+
+# D)
+cbind(10:30, pnorm(qnorm(0.995)-1.75*sqrt(10:30)/2) - pnorm(qnorm(0.005)-1.75*sqrt(10:30)/2))
+# Por tentativa e erro, a menor amostra é n = 16
+
+```
+
