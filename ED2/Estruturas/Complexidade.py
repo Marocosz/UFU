@@ -17,7 +17,7 @@ Buscamos sempre o "termo dominante" (Aquele na função cujo há a maior efetivi
 
 Exemplo: A Função de complexidade do algorítmo sendo: N*(N-1)/2 (Soma entre os termos de uma PA)
 Temos que: N*(N-1)/2 = (N^2 - N)/2 -> Assim, sabemos que o termo dominante é "N^2"
-Em termos da notação do O Grande, ficaria: O(n^2)   (usamos "n" minúsculo mesmo)
+Em termos da notação do O Grande, ficaria: O(N^2)
 
 Assim, usando essa análise do O Grande, conseguimos destinguir melhor a complexiade entre os algorítmos
 
