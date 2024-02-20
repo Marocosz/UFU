@@ -35,6 +35,7 @@ print(no1.data)
 ## Construindo uma Lista Encadeada
 """
 
+
 class LinkedList:
     def __init__(self):
         self.head = None  # De acordo com os nós, precisamos ter conhecimento do primeiro elemento da lista
@@ -63,6 +64,21 @@ class LinkedList:
         return self._size
     # Complexidade: O(1)
 
+    def _getnode(self, index):
+        """
+        Função para pegar o valor que está no index escolhido
+        """
+        """
+        De acordo com o "index", o código irá andando na lista usando o "pointer", e então retornará o node desejado
+        """
+        pointer = self.head
+        for i in range(index):
+            if pointer:
+                pointer = pointer.next
+            else:
+                raise IndexError(f'List index out of range')
+        return pointer
+
     def get(self, index):
         pass
 
@@ -71,15 +87,7 @@ class LinkedList:
 
     def __getitem__(self, index):
         # Será uma função da class LinkedList como se fosse uma lista embutida do python
-        pointer = self.head
-        """
-        De acordo com o "index", o código irá andando na lista usando o "pointer", e então retornará o valor
-        """
-        for i in range(index):
-            if pointer:  # Se existe um self.head
-                pointer = pointer.next
-            else:
-                raise IndexError("List index out of range")
+        pointer = self._getnode(index)  # Pegando o "node" do index desejado
 
         if pointer:
             return pointer.data
@@ -89,16 +97,7 @@ class LinkedList:
 
     def __setitem__(self, index, elem):
         # Será uma função da class LinkedList como se fosse uma lista embutida do python
-        pointer = self.head
-        """
-        De acordo com o "index", o código irá andando na lista usando o "pointer", e então dará o novo valor de acordo
-        com o "elem"
-        """
-        for i in range(index):
-            if pointer:  # Se existe um self.head
-                pointer = pointer.next
-            else:
-                raise IndexError("List index out of range")
+        pointer = self._getnode(index)  # Pegando o "node" do index desejado
 
         if pointer:
             pointer.data = elem
@@ -121,7 +120,62 @@ class LinkedList:
         raise ValueError(f"{elem} is not in list")
     # Complexidade: O(N)
 
+    def insert(self, index, elem):
+        """
+        Função para inserção de elementos em um index específico
+        """
+        node = Node(elem)
+        if index == 0:
+            # Quando o usuário querer que seja o primeiro ítem da lista
+            node.next = self.head
+            self.head = node
+        else:
+            pointer = self._getnode(index-1)  # Pegando o "node" do index desejado
+            """
+            OBS: Não podemos perder o endereço do nó posterior ao index escolhido, pois assim perderemos todo restante
+            da lista, dessa forma, fazemos:
+            """
+            node.next = pointer.next  # Salvando o endereço do nó posterior para então depois fazer a substituição
+            pointer.next = node
+        self._size += 1  # Aumentando o tamanho da lista (visto que adicionamos um ítem)
 
+    def remove(self, elem):
+        if self.head == None:
+            raise ValueError(f"{elem} is not in list")
+        elif self.head.data == elem:
+            self.head = self.head.next
+            self._size -= 1
+            return True
+        else:
+            ancestor = self.head
+            pointer = self.head.next
+            while pointer:
+                if pointer.data == elem:
+                      # removendo
+                    ancestor.next = pointer.next
+                    pointer.next = None
+                ancestor = pointer
+                pointer = pointer.next
+            self._size -= 1
+            return True
+        raise ValueError(f"{elem} is not in list")
+
+    def __repr__(self):
+        """
+        Método Especial de representação do objeto (print)
+        """
+        r = ''
+        pointer = self.head
+        while pointer:
+            r = r + str(pointer.data) + '->'
+            pointer = pointer.next
+        return r
+
+    def __str__(self):
+        return self.__repr__()
+
+
+# Testes
 lista = LinkedList()
 
 lista.append(2)
@@ -131,3 +185,26 @@ print(len(lista))
 print(lista[0])
 
 print(lista.index(2))
+
+lista.insert(1, 32)
+
+print(lista[1])
+print(lista[2])
+
+lista.remove(6)
+
+print(lista)
+
+lista2 = LinkedList()
+
+lista2.append(8)
+lista2.append(10)
+lista2.append(23)
+lista2.append(1)
+lista2.append(3)
+
+print(lista2)
+
+lista2.remove(10)
+
+print(lista2)
