@@ -23,14 +23,6 @@ class Node:
         self.next = None
 
 
-no1 = Node(5)
-no2 = Node(3)
-no1.next = no2
-
-print(no1.next.data)
-print(no1.data)
-
-
 """
 ## Construindo uma Lista Encadeada
 """
@@ -138,6 +130,7 @@ class LinkedList:
             node.next = pointer.next  # Salvando o endereço do nó posterior para então depois fazer a substituição
             pointer.next = node
         self._size += 1  # Aumentando o tamanho da lista (visto que adicionamos um ítem)
+    # Complexidade: 0(N)
 
     def remove(self, elem):
         if self.head == None:
@@ -159,6 +152,7 @@ class LinkedList:
             self._size -= 1
             return True
         raise ValueError(f"{elem} is not in list")
+    # Complexidade: O(N)
 
     def __repr__(self):
         """
@@ -176,35 +170,37 @@ class LinkedList:
 
 
 # Testes
-lista = LinkedList()
+if __name__ == '__main__':
+    lista = LinkedList()
 
-lista.append(2)
-lista.append(6)
+    lista.append(2)
+    lista.append(6)
 
-print(len(lista))
-print(lista[0])
+    print(len(lista))
+    print(lista[0])
 
-print(lista.index(2))
+    print(lista.index(2))
 
-lista.insert(1, 32)
+    lista.insert(1, 32)
 
-print(lista[1])
-print(lista[2])
+    print(lista[1])
+    print(lista[2])
 
-lista.remove(6)
+    lista.remove(6)
 
-print(lista)
+    print(lista)
 
-lista2 = LinkedList()
+    lista2 = LinkedList()
 
-lista2.append(8)
-lista2.append(10)
-lista2.append(23)
-lista2.append(1)
-lista2.append(3)
+    lista2.append(8)
+    lista2.append(10)
+    lista2.append(23)
+    lista2.append(1)
+    lista2.append(3)
 
-print(lista2)
+    print(lista2)
 
-lista2.remove(10)
+    lista2.remove(10)
 
-print(lista2)
+    print(lista2)
+
