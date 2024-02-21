@@ -50,9 +50,11 @@ class Node:
 
 
 class BinaryTree:
-    def __init__(self, data=None):
+    def __init__(self, data=None, node=None):
         # Basicamente estamos apenas determinando a raiz da class BinaryTree, e também teremos os métodos de árvore
-        if data:
+        if node:
+            self.root = node
+        elif data:
             node = Node(data)
             self.root = node
         else:
@@ -70,13 +72,11 @@ class BinaryTree:
             node = self.root
 
         if node.left:
-            print('(', end='')  # Como precisamos da '(' sempre antes dos elementos 'esquerda', adotamos isso antes
             self.inorder(node.left)
-        print(node, end='')
+        print(node, end=' ')
 
         if node.right:
             self.inorder(node.right)
-            print(')', end='')  # Como precisamos da ')' sempre depois dos elementos 'direita', adotamos isso depois
 
     def postorder(self, node=None):
         """
@@ -115,7 +115,6 @@ class BinaryTree:
             return hright + 1
         else:
             return hleft + 1
-
 
 
 if __name__ == "__main__":
