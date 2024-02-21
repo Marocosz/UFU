@@ -4,11 +4,15 @@
 É uma estrutura de dado, muito usada, melhor estrutura para sistema de busca
 
 Raiz: É o primeiro elemento de uma árvore (no topo da árvore)
-Folha: São os últimos elementos, quais não tem condição posterior nenhuma a nenhum outro elemento
+Folha: São os últimos elementos, quais não tem ligação posterior nenhuma a nenhum outro elemento
 (todos são "nós")
 
 Há o conceito de "pai" e "filho" dentro da estrutura
 Há o conceito de "ancestral" e "descendente" dentro da estrutura
+
+Caminho: É uma sequência de "Nós" que estão interligados, podemos contar por "Arestas" ou por "Nós"
+Altura: É o comprimento do caminho entre a "Raiz" e a "Folha" mais profunda (Lembrando que há subárvores)
+Profundidade: A Profundidade de um "Nó" se dá pela distância do caminho desse "Nó" até a "Raíz" da Árvore
 
 ## Árvore Binária
 
