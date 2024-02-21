@@ -59,7 +59,7 @@ class Stack:
         r = ''
         pointer = self.top
         while pointer:
-            r = r + str(pointer.data) + "\n"
+            r = r + str(pointer.data) + " "
             pointer = pointer.next
         return r
 
@@ -80,3 +80,4 @@ print(pilha1)
 print(len(pilha1))
 print(pilha1.peek())
 print(pilha1.pop())
+print(pilha1)

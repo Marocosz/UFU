@@ -65,7 +65,7 @@ class Queue:
             pointer = self.first
             while pointer:
                 r = r + str(pointer.data) + " "
-                pointer = self.first.next
+                pointer = pointer.next
             return r
         return "Empty Queue"
 
@@ -73,3 +73,13 @@ class Queue:
         return self.__repr__()
 
 
+fila = Queue()
+
+print(fila)
+
+fila.push(9)
+fila.push('Aaa')
+fila.push(2.3)
+print(fila)
+fila.pop()
+print(fila)
