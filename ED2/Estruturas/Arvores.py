@@ -59,7 +59,7 @@ class BinaryTree:
             self.root = None
 
     # Percurso de forma simétrica
-    def simetric_traversal(self, node=None):
+    def inorder(self, node=None):
         """
         Função recursiva que ao chegar na raiz, ele pedirá para exibir o filho da esquerda (que também é uma raiz, da
         subárvore) então por isso a recursividade, ao fazer isso com a esquerda, ele irá para a direita, e fará o
@@ -71,12 +71,52 @@ class BinaryTree:
 
         if node.left:
             print('(', end='')  # Como precisamos da '(' sempre antes dos elementos 'esquerda', adotamos isso antes
-            self.simetric_traversal(node.left)
+            self.inorder(node.left)
         print(node, end='')
 
         if node.right:
-            self.simetric_traversal(node.right)
+            self.inorder(node.right)
             print(')', end='')  # Como precisamos da ')' sempre depois dos elementos 'direita', adotamos isso depois
+
+    def postorder(self, node=None):
+        """
+        Percursão Pós-Ordem em Árvore Binária
+
+        Sistema de Busca:
+        Sempre buscar primeiro os filhos da esquerda (primeiramente) e depois da direita, até a raiz
+
+        OBS: Cada nó pode ser olhado como uma raiz, é bom ter essa ideia para trabalharmos com recursão
+        """
+        if node is None:
+            node = self.root
+
+        if node.left:
+            self.postorder(node.left)
+
+        if node.right:
+            self.postorder(node.right)
+
+        print(node, end=' ')
+
+    def height(self, node=None):
+        if node is None:
+            node = self.root
+
+        hleft = 0
+        hright = 0
+
+        if node.left:
+            hleft = self.height(node.left)
+
+        if node.right:
+            hright = self.height(node.right)
+
+        if hright > hleft:
+            return hright + 1
+        else:
+            return hleft + 1
+
+
 
 if __name__ == "__main__":
     # Dados para implementar o desenho feito (A mão)
@@ -101,5 +141,8 @@ if __name__ == "__main__":
     n2.right = n3
     tree.root = n2
 
-    tree.simetric_traversal()
+    tree.inorder()
     # Assim, conseguimos salvar uma expressão matemática em uma árvore
+
+    print()
+    print(tree.height())
