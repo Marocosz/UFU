@@ -38,3 +38,206 @@ cbind(10:30, pnorm(qnorm(0.995)-1.75*sqrt(10:30)/2) - pnorm(qnorm(0.005)-1.75*sq
 
 ```
 
+================================================================================*
+## Aula 22/02*
+================================================================================*
+
+Para diferenciarmos se vamos usar o Z(Aula Passada) ou o T é ter ou não o conhecimento do desvio padrão
+
+Usamos Z quando: O desvio padrão é dado junto a variável
+Usamos T quando: O desvio padrão é dá amostra
+
+*# Exercício 01*
+X = Vida do pneu
+Mi = ?
+Sigma = ?
+(se meu interesse é o Mi, usamos o teste T)
+Média (x com barrinha) = 59139
+S = Desvio Padrão = 3645
+n = 16
+
+
+# a)
+Alpha = 0.005
+T0 = ((média - Mi0)/(s/raiz de n)) = (59139 - 60000)*raiz de 16 / 3645 = -0,944856
+
+v = n - 1 = 15 - 1 = 15 gl (grau de liberdade)
+
+valorp = P(X <= -0,944856) = pt(-0,944856, 15) = 0,178952 > 0,05
+
+Conclusão: Falha-se em rejeitar H0, ou seja, não há evidências que a vida média do pneu seja inferior a 60.000
+```{r}
+pt(-0.944856, 15)  # 0.1798523
+```
+
+
+
+# b)
+1 - alpha = 0,95
+
+mi <= média + qt (0,95;15) * (s/raiz de n)
+```{r}
+59139 + qt(0.95, 15)*(3645/sqrt(16))  # 60736.47
+```
+
+
+*# Exercício 02*
+
+X = Tensão de ruptura
+Mi = ?
+Sigma = ?
+(se meu interesse é o Mi, usamos o teste T)
+Média = 13,71364
+s = 3,55357 (Desvio Padrão)
+n = 22 (número de amostra)
+
+# A)
+
+H0: mi = 10
+H1: mi > 10
+
+v = n - 1 = 22 - 1 = 21 gl (grau de liberdade)
+
+T0 = ((média - Mi0)/(s/raiz de n)) = (mean(x) - 10)*sqrt(22)/sd(x) = 4,901682
+
+valorp = P(x >= T0) = pt(4.901682, 21, lower=FALSE) = 0,000038 < 0,05
+
+Conclusão: Rejeita-se H0, ou seja, há evidências que a tensão média exceda 10 MPa
+
+```{r}
+x = c(19.8, 15.4, 11.4, 19.5, 10.1, 18.5, 14.1, 8.8, 
+14.9, 7.9, 17.6, 13.6, 7.5, 12.7, 16.7, 11.9, 15.4, 
+11.9, 15.8, 11.4, 15.4, 11.4)
+
+(mean(x)-10)*sqrt(22)/sd(x)  # 4.901682
+
+pt(4.901682, 21, lower=FALSE)  # 3.781273e-05
+```
+
+
+# B)
+
+1 - alpha = 0,95  -> alpha = 0,005
+mi >= média + qt(0,05;21) * (s/sqrt(n))
+
+mean(x) + qt(0.005, 21) * (sd(x)/sqrt(22)) = 11.56853
+```{r}
+mean(x) + qt(0.005, 21) * (sd(x)/sqrt(22))  # 11.56853
+```
+
+
+# Resolução pelo comando t. test
+```{r}
+t.test(x, alternative=c("greater"), mu=10, conf.level=0.95)
+```
+*# Exercício 03*
+
+X = tempo tarefa n normal
+sigma = ? ( σ )
+mi = ?
+n = 30
+s = 25
+s² = 625
+v = n - 1 = 30 - 1 = 29 gl
+
+# A)
+
+alpha = 0,02
+
+*intervalo de confiança bilateral:*
+((n-1)x s²)/qx²((1-alpha)/2;n-1) <= sigma² <= ((n-1)x s²)/qx²(alpha;n-1)
+```{r}
+sqrt(29*625/qchisq(0.99, 29))  # 19.11839
+sqrt(29*625/qchisq(0.01, 29))  # 35.65605
+```
+
+# B)
+
+H0: σ = 20
+H1: σ != 20
+
+H0: σ² = 400
+H1: σ² = 400
+
+X0² = (n-1)*S²/σ0² = 29 x 625/400 = 45,3125
+
+valorp = 2*min[P(x <= X0²), P(x >= X0²)] = 2 x 0,02743041 = 0,054861 > 0,02
+
+Conclusão: Falha-se em rejeitar H0, ou seja, não há evidências que o desvio padrão do tempo é diferente de 20 segundos
+
+```{r}
+pchisq(45.3125, 29)  # 0.9725696
+pchisq(45.3125, 29, lower=FALSE)  # 0.02743041
+```
+
+*# Exercício 04*
+
+x = volume e enchimento n normal
+sigma = ?
+n = 20
+alpha = 0,05
+s = sd(x) = desvio padrão = 11,34391
+s² = var(x) = variância = 128,6842
+
+
+# A)
+
+1-alpha = 0,95
+
+sigma² >= ((n-1)*s²)/qX²(1-alpha;n-1)
+sigma >= sqrt((20-1)*var(x)/qX²(0.95, 19)) = 9.006217
+
+
+# B)
+
+H0: sigma² = 100
+H1: sigma² > 100
+
+X0² = ((n-1) x S²)/Sigma0² = 19*var(x)/100 = 24,45
+
+intervalo de confiança superior
+valorp = P(x >= X0²) = pchisq(24.45, 19, lower=FALSE) = 0,1794533 > 0,05
+
+Conclusão: Falha-se em rejeitar H0, ou seja, não há evidências em que a variância do volume seja maior que 100 
+
+```{r}
+x = c(997, 987, 1002, 1013, 1012, 1017, 978, 998, 
+1011, 989, 993, 983, 982, 990, 992, 979, 994, 
+996, 1001, 996)
+
+sd(x)
+var(x)
+sqrt((20-1)*var(x)/qchisq(0.95, 19))  # 9.006217
+19*var(x)/100  # 24.45
+pchisq(24.45, 19, lower=FALSE)  # 0.1794533
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
