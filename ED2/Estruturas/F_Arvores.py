@@ -98,6 +98,18 @@ class BinaryTree:
 
         print(node, end=' ')
 
+    def preorder(self, node=None):
+        if node is None:
+            node = self.root
+        print(node.data, end=' ')
+
+        if node.left:
+            self.preorder(node.left)
+
+        if node.right:
+            self.preorder(node.right)
+
+
     def height(self, node=None):
         if node is None:
             node = self.root
@@ -144,4 +156,4 @@ if __name__ == "__main__":
     # Assim, conseguimos salvar uma expressão matemática em uma árvore
 
     print()
-    print(tree.height())
+    print(tree.preorder())

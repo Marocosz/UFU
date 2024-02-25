@@ -122,15 +122,14 @@ class BinarySearchTree(BinaryTree):
         return node
 
 if __name__ == "__main__":
-    values = [12, 34, 67, 23, 78, 92, 67, 21, 23, 1000, 1, 35, 90]
+    values = [6, 2, 8, 1, 4, 3]
     bst = BinarySearchTree()
 
     for v in values:
         bst.insert(v)
 
-    items = [1, 3, 981, 500, 1000]
-
-    bst.levelorder()
-    bst.remove(34)
+    bst.inorder()
     print()
-    bst.levelorder()
+    bst.preorder()
+    print()
+    bst.postorder()
