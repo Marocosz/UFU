@@ -9,7 +9,7 @@ Pilha: LIFO (Last in first out) (última a entrar, primeiro a sair)
 Podemos usar o ctrl+z como um exemplo
 """
 # Implementação
-from No_Alocação_Encadeada import Node
+from C_No_Alocação_Encadeada import Node
 
 
 class Stack:

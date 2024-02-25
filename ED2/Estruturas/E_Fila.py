@@ -3,7 +3,7 @@
 
 Funciona como uma fila mesmo, quero remover do começo, e inserir no final
 """
-from No_Alocação_Encadeada import Node
+from C_No_Alocação_Encadeada import Node
 
 
 class Queue:
@@ -73,13 +73,14 @@ class Queue:
         return self.__repr__()
 
 
-fila = Queue()
+if __name__ == "__main__":
+    fila = Queue()
 
-print(fila)
+    print(fila)
 
-fila.push(9)
-fila.push('Aaa')
-fila.push(2.3)
-print(fila)
-fila.pop()
-print(fila)
+    fila.push(9)
+    fila.push('Aaa')
+    fila.push(2.3)
+    print(fila)
+    fila.pop()
+    print(fila)

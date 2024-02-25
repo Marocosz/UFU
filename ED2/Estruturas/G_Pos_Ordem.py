@@ -7,7 +7,7 @@ Sempre buscar primeiro os filhos da esquerda (primeiramente) e depois da direita
 OBS: Cada nó pode ser olhado como uma raiz, é bom ter essa ideia para trabalharmos com recursão
 """
 
-from Arvores import BinaryTree, Node
+from F_Arvores import BinaryTree, Node
 
 tree = BinaryTree()
 
