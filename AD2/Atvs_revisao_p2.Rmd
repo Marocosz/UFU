@@ -1,0 +1,226 @@
+# Exercício 01
+
+sigma = 0.001
+n = 15
+x¬ = 74,036
+
+A) # CERTO
+
+alpha = 0.015
+
+74.036 + qnorm(0.015/2)*0.001/sqrt(15)
+74.036 + qnorm((1-0.015)/2)*0.001/sqrt(15)
+```{r}
+74.036 + qnorm(0.015/2)*0.001/sqrt(15)
+74.036 + qnorm(0.985/2)*0.001/sqrt(15)
+```
+B) CERTO
+
+alpha = 0.035
+
+H0: x¬ = 74.035
+H1: x¬ != 74.035
+
+Z0 = (74.036 - 74.035)*(sqrt(15)/0.001)  # 3.872983
+
+2*pnorm(3.872983, lower=FALSE)
+```{r}
+z0 = (74.036 - 74.035)*sqrt(15)/0.001
+z0
+2*pnorm(z0, lower=FALSE)
+```
+C) CERTO
+
+alpha = 0.05
+
+delta = |0 - 0.00075| = 0.00075
+
+beta = pnorm(qnorm(1-0.05/2)-(0.00075*sqrt(15))/0.001) - pnorm(qnorm(0.05/2)-(0.00075*sqrt(15))/0.001)
+ 
+poder = 1 - beta = 1 - 0.172386 = 0.8276133
+
+```{r}
+pnorm(qnorm(1-0.05/2)-(0.00075*sqrt(15))/0.001) - pnorm(qnorm(0.05/2)-(0.00075*sqrt(15))/0.001) # 0.1723867
+1 - 0.1723867
+```
+
+Exercício 02
+
+sigma = 2500
+n = 16
+x¬ = 61200
+
+A) CERTO
+
+alpha = 0.01
+
+H0: mi = 60000
+H1: mi > 60000
+
+Z0 = (61200-60000)*sqrt(16)/2500
+pnorm(z0, lower=FALSE)
+
+```{r}
+z0 = (61200-60000)*sqrt(16)/2500 # 1.92
+z0
+pnorm(z0, lower=FALSE)
+```
+
+B) CERTO
+
+alpha = 0.01
+
+mi >= 61200 + qnorm(0.01)*2500/sqrt(16) = 59746.03
+
+```{r}
+61200 + qnorm(0.01)*2500/sqrt(16) # 59746.03
+
+```
+
+C) ERRADO
+
+x¬ = 61750
+tipo II = 0.2
+alpha = 0.01
+
+```{r}
+
+
+```
+
+D) ERRADO
+
+
+
+
+Exercicio 03 
+
+x¬ = 10
+sigma = 2.5
+
+A) ERRADO
+
+n = 20
+
+z0 = (10 - 11.5)*sqrt(20)/2.5
+z01 = (10 - 8.5)*sqrt(20)/2.5
+```{r}
+z0 = (11.5 - 10)*sqrt(20)/2.5
+z01 = (8.5 - 10)*sqrt(20)/2.5
+z0
+z01
+
+pnorm(z0)
+pnorm(z01) - pnorm(z0)
+```
+
+B) CERTO
+
+1 - beta = 0.8
+beta = 0.2
+alpha = 0.05
+
+delta = 2
+
+pnorm(qnorm(1-0.05/2)-(2*sqrt(1))/2.5) - pnorm(qnorm(0.05/2)-(2*sqrt(1))/2.50)
+```{r}
+cbind(0:100, 1 - pnorm(qnorm(1-0.05/2)-(2*sqrt(0:100))/2.5) - pnorm(qnorm(0.05/2)-(2*sqrt(0:100))/2.50))
+```
+
+
+
+exercicio 04
+
+n = 20
+x¬ = 300
+S = 25
+
+A) CERTO
+
+h0: mi = 310
+h1: m2 != 310
+
+t0 = (300-310)*sqrt(20)/25
+```{r}
+t0 = (300-310)*sqrt(20)/25
+
+2*pt(t0, 19)
+```
+B) ERRADO
+
+mi >= 300 + qt(0.05/2, 19)*25/sqrt(20)
+mi <= 300 + qt(1-0.05/2, 19)*25/sqrt(20)
+```{r}
+sqrt(300 + qt(0.05/2, 19)*(25/sqrt(20)))
+sqrt(300 + qt((1-0.05)/2, 19)*25/sqrt(20))
+```
+
+
+
+
+
+
+Exercicio 05
+
+n = 20
+S² = 130
+S = sqrt(130)
+
+A) CERTO
+
+alpha = 0.05
+
+!= 90
+
+X0² = (19)*130/(90)
+
+sigma² = 90
+
+```{r}
+x0 = (19)*130/(90)
+
+2*pchisq(x0, 19, lower=FALSE)
+
+```
+
+B) CERTO
+
+sigma² => 19*130/qchisq(1-0.05, 19)
+```{r}
+19*130/qchisq(1-0.05, 19)
+```
+
+
+Exercicio 06
+
+n = 10
+
+
+
+A) CERTO
+
+alpha = 0.005
+
+sigma² >= 30 + qt(0.005/2, 9)*5/sqrt(10)
+sigma² <= 30 + qt((1-0.005)/2, 9)*5/sqrt(10)
+```{r}
+30 + qt(0.005/2, 9)*5/sqrt(10)
+30 + qt(1-0.005/2, 9)*5/sqrt(10)
+```
+
+B) CERT0
+
+(9)*1/qchisq(1-0.01/2, 9)
+(9)*1/qchisq(0.01/2, 9)
+
+```{r}
+sqrt((9)*1/qchisq(1-0.01/2, 9))
+sqrt((9)*1/qchisq(0.01/2, 9))
+```
+
+
+
+
+
+
+

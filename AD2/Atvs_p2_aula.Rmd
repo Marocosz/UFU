@@ -1,0 +1,213 @@
+*## Exercício 02 ==============================================================*
+
+Sabe-se que a vida de uma bateria, em horas, é uma 
+variável aleatória normal com desvio-padrão σ = 2 h. 
+Uma amostra aleatória de 10 baterias foi retirada, 
+resultando em uma vida média ̅x = 39 h. Com α = 
+0,01:
+
+OBS: Sabemos que usaremos o "Z" pois o exercício nos dá a "media" e o "desvio padrão"
+     Queremos "μ"
+
+# dados:
+n = 10
+σ = 2
+x¬ = 39
+α = 0,01
+
+A) Determine um intervalo de confiança bilateral para a vida 
+   média da bateria.
+
+x¬ + QZ(α/2)*σ/sqrt(n)
+x¬ + QZ((1-α)/2)*σ/sqrt(n)
+(μ está entre esses dois)
+
+QZ = qnorm()
+```{r}
+39+qnorm(0.01/2)*2/sqrt(10) # 37.3709
+39+qnorm(1-0.01/2)*2/sqrt(10) # 40.6291
+```
+
+B) Há evidências de que a vida média da bateria não seja de 
+   40 horas?
+
+Aqui precisamos da "Estatística de Teste"
+Z0 = (x¬ - μ0)*sqrt(n)/σ
+
+E depois, achamos o "valor-p" utilizando o "inferior bilateral"
+
+Ou seja: Falha em rejeitar H0, ou seja, não há evidências que "mi" != 40
+
+P(X >= |Z0|) = Pnorm(Z0)
+```{r}
+Z0 = (39 - 40)*sqrt(10)/2  # -1.581139
+2*(pnorm(Z0)) # 0.1138463
+```
+
+C) Determine o poder do teste para detectar um desvio na 
+   hipótese nula de ± 1,75 horas (erro do tipo II)
+
+Z1 = 1.,75
+
+Φ = Função de Distribuição Acumulada Padronizada (pnorm)
+
+δ = |μ - μ0| = |0 - 1.75|
+
+β = Φ(Qz(1-α/2)-(δ x sqrt(n)/σ)) - Φ(Qz(α/2)-(δ x sqrt(n)/σ))
+```{r}
+1-pnorm(qnorm(1-0.01/2)-(1.75*sqrt(10)/2)) - pnorm(qnorm(0.01/2)-(1.75*sqrt(10)/2)) # 0.4241986
+```
+
+D) Para o item (c), qual o tamanho da amostra necessária para 
+   se obter um erro do tipo II inferior a 0,2? (erro do tipo II)
+
+Aqui vamos usar a mesma fórmula da (c), porém para chegarmos ao resultado 0,2, precisariamos testar
+vários tamanhos de amostra "n", para isso usamos o "cbind"
+
+E encontraremos que para obter um erro do tipo II inferior a 0,2 precisariamos de "n" = 16
+```{r}
+cbind(10:30, pnorm(qnorm(1-0.01/2)-(1.75*sqrt(10:30)/2)) - pnorm(qnorm(0.01/2)-(1.75*sqrt(10:30)/2)))
+```
+
+
+*## Exercício 03 ==============================================================*
+
+O tempo de determinada tarefa manual segue uma 
+distribuição normal. Foram cronometradas 
+aleatoriamente 30 pessoas desempenhando a tarefa 
+e obteve-se um desvio-padrão de 25 segundos. 
+Considerando um erro do tipo I igual a 0,02:
+
+OBS: Sei que o "desvio-padrão" mencionado é o "S" e não o "σ" já que estamos 
+     trabalhando com a população inteira
+
+OBS: Sabemos que usaremos o "X²" pois o exercício nos dá "desvio Padrão S" que nos dá "Variância S²"
+     queremos saber do "σ"
+
+n = 30
+s = 25
+s² = 625
+erro do tipo I = 0,02 = α
+
+A) Determinar um intervalo de confiança bilateral para o 
+   desvio-padrão do tempo da tarefa
+
+σ² >= ((n-1) x S²))/(Qx²(1-α/2: n-1))
+σ² <= ((n-1) x S²))/(Qx²(α/2: n-1))
+
+Qx² = qchisq(p1, p2)
+
+σ está entre 19.11839 e 35.65605
+```{r}
+sqrt(((30-1)*625)/(qchisq(1-0.02/2, 30-1))) # 19.11839
+sqrt(((30-1)*625)/(qchisq(0.02/2, 30-1))) # 35.65605
+```
+
+B) Teste a hipótese que o desvio-padrão do tempo da 
+   tarefa é diferente de 20 segundos
+
+Teste de Hipotese = "valor-p" utilizando "X0²"
+
+H0: σ = 20
+H1: σ != 20
+
+σ = 20
+σ² = 400
+
+v = n - 1 = 29
+
+X0² = ((n-1)*s²)/σ0² = 45.3125
+
+valor-p (bilateral ja que é "diferente de 20 segundos" = 2 * min[P(x <= X0²); P(x >= X0²)]
+min = menor valor entre eles
+
+sendo que: P(x <= X0²) = pchisq(X0², V)
+           P(x >= X0²) = pchisq(X02, V, lower=FALSE)
+
+valor-p = 0.05486082
+
+ou seja, 0.05486082 > 0,02(α), assim falha-se em rejeitar H0(σ=20), ou seja, não há evidências que o desvio padrão do tempo é diferente de 20 segundos
+
+```{r}
+((30-1)*625)/400  # 45.3125
+pchisq(45.3125, 29)  # 0.9725696
+pchisq(45.3125, 29, lower.tail = FALSE)  # 0.02743041
+
+2*0.02743041  # 0.05486082
+```
+
+
+*## Exercício 04 ==============================================================*
+
+Uma máquina é usada para encher garrafas de 
+refrigerante de 1.000 ml. Uma amostra aleatória de 
+tamanho 20 resultou nos dados abaixo. Com α = 0,05 
+e supondo que o volume de enchimento seja uma 
+variável aleatória normal:
+
+x = c(997, 987, 1002, 1013, 1012, 1017, 978, 998, 
+1011, 989, 993, 983, 982, 990, 992, 979, 994, 
+996, 1001, 996)
+
+n = 20
+α = 0,05
+
+A) Determine um intervalo de confiança unilateral inferior para 
+   o desvio-padrão do volume de enchimento.
+
+1 - α = 0,95
+S = sd(x) = 11.34391
+S² = var(x) = 128.6842
+
+σ² = ((n-1) x S²))/(Qx²(1-α/2: n-1))
+σ = sqrt(((n-1) x S²))/(Qx²(1-α/2: n-1)))
+
+
+```{r}
+x = c(997, 987, 1002, 1013, 1012, 1017, 978, 998, 
+1011, 989, 993, 983, 982, 990, 992, 979, 994, 
+996, 1001, 996)
+
+sd(x)
+var(x)
+
+sqrt((20-1)*var(x)/qchisq(1-0.05,20-1)) # 9.006217
+
+```
+
+B) Teste a hipótese de que a variância do volume de 
+   enchimento é maior que 100 ml2
+
+
+H0: σ = 100
+H1: σ > 10
+
+v = n - 1 = 19
+
+X0² = ((n-1)*s²)/σ0² = 24.45
+
+P(x >= X0²)  (teste de hipotese, valor-p) = pchisq(X02, v) = 0.1794533 > 0.05
+
+Como 0.1794533 > 0.05 Falha-se em rejeitar H0, ou seja, não há evidências em que a variância do volume seja maior que 100 
+
+
+```{r}
+((20-1)*var(x)/100) # 24.45
+pchisq(24.45, 19, lower=FALSE)  # 0.1794533
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

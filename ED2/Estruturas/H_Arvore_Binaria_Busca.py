@@ -7,8 +7,8 @@ Olhando para qualquer "nó" de uma árvore binária de busca temos que seu "filh
 """
 # Implementando
 from F_Arvores import Node, BinaryTree
-from E_Fila import Queue
 import random
+
 ROOT = "ROOT"
 
 
@@ -18,10 +18,10 @@ class BinarySearchTree(BinaryTree):
         parent = None
         x = self.root
         while x:
-        # Enquanto "x" ter um valor, definir "parent"="x" e verificar se "elem" é menor ou maior, se for menor,
-        # daremos para "x" o valor do "x.left" (filho da esquerda), se for maior, daremos para "x" o valor do
-        # "x.right" (filho da direita) e então repetirá o algorítmo até "x" não ter valor, assim, a variável
-        # "parent", terá o valor do último filho (com um ramo livre) de acordo com o caminho de ABB do elemento dado
+            # Enquanto "x" ter um valor, definir "parent"="x" e verificar se "elem" é menor ou maior, se for menor,
+            # daremos para "x" o valor do "x.left" (filho da esquerda), se for maior, daremos para "x" o valor do
+            # "x.right" (filho da direita) e então repetirá o algorítmo até "x" não ter valor, assim, a variável
+            # "parent", terá o valor do último filho (com um ramo livre) de acordo com o caminho de ABB do elemento dado
             parent = x
             if elem < x.data:
                 x = x.left
@@ -53,26 +53,6 @@ class BinarySearchTree(BinaryTree):
             return self.search(elem, node.left)
 
         return self.search(elem, node.right)
-
-    def levelorder(self, node=ROOT):
-        """
-        Aqui é um sistema de percurso em nível, utilizando sistema de "Fila" para acrescentar os dados e então
-        printar da forma como tem q ser
-        """
-        if node == ROOT:
-            node = self.root
-
-        queue = Queue()
-        queue.push(node)
-        while len(queue):
-            node = queue.pop()
-            if node.left:
-                queue.push(node.left)
-
-            if node.right:
-                queue.push(node.right)
-
-            print(node, end=' ')
 
     def min(self, node=ROOT):
         if node == ROOT:
@@ -121,8 +101,27 @@ class BinarySearchTree(BinaryTree):
 
         return node
 
+    def height(self, node=None):
+        if node is None:
+            node = self.root
+
+        hleft = 0
+        hright = 0
+
+        if node.left:
+            hleft = self.height(node.left)
+
+        if node.right:
+            hright = self.height(node.right)
+
+        if hright > hleft:
+            return hright + 1
+        else:
+            return hleft + 1
+
+
 if __name__ == "__main__":
-    values = [6, 2, 8, 1, 4, 3]
+    values = [30, 5, 45, 11, 23, 51, 37, 2]
     bst = BinarySearchTree()
 
     for v in values:
@@ -133,3 +132,5 @@ if __name__ == "__main__":
     bst.preorder()
     print()
     bst.postorder()
+    print()
+    print(bst.height())

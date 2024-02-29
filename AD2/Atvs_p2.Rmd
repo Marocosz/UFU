@@ -1,0 +1,94 @@
+```{r}
+# Execício 1
+x = c(143.5, 141.3, 152.4, 144.3, 149.9)
+
+md = mean(x)
+md1 = 150
+desvio = 6.26
+n = 5
+
+z = (md-md1)/(desvio/sqrt(n))
+valorp = pnorm(z)
+valorp
+
+```
+# Exercício 2
+
+media (mi) = 2,3
+n = 21
+media amostral (x com tracinho) = 2,32
+desvio padrão amostral (σ sigma) = 0,11
+alpha = 0,054
+
+v = n - 1
+T0 = ((média - Mi0)/(s/raiz de n)) = (2.32 - 2,3)/*(sqrt(21)/0,11)
+
+valor-p = P(x >= T0) = pt(T0, v, lower=FALSE) = pt(0.8331956, 21, lower=FALSE)
+
+
+```{r}
+# Exercício 2
+
+# T0
+(2.32 - 2.3)*(sqrt(21)/0.11) # 0.8331956
+
+# Valor-p 
+pt(0.8331956, 20, lower=FALSE) # 0.2070554 > 0,05
+```
+
+# Exercício 3
+Achar o intervalo de confiança unilateral inferior a 93%
+
+se 93% (alpha = 7%)
+
+média amostral (x¬) = 16,61
+n = 6
+s (desvio padrão) = 0,71
+
+mi >= x¬ + qt(alpha:(n - 1)) * s/sqrt(n)
+mi = 16.61 + qt(0,07, 5) * (0.71/sqrt(6))
+```{r}
+16.61 + qt(0.07, 5) * (0.71/sqrt(6))
+```
+
+Exercicio 04
+
+n = 18
+s = 2,67
+
+v = n - 1 = 17
+
+H0: sigma = 3,5
+H1: sigma != 3,5
+
+A)
+
+X0² = (n-1)*S²/σ0² = 9.893167
+valorp = 2*min[P(x <= X0²), P(x >= X0²)] = 2 x 0.9080304 = 0.1839392
+pchisq = min[P(x <= X0²), P(x >= X0²)
+
+B)
+
+1 - alpha = 0.874
+alpha = 0.126
+
+sigma² >= ((n-1)*s²)/qX²(1-alpha;n-1)
+
+sigma >= sqrt(((18-1)*2.67**2)/qchisq(1-0.126,18-1))
+
+
+```{r}
+(17*(2.67**2))/(3.5)**2
+2*pchisq(9.893167, 17) # 0.09196958
+sqrt(((18-1)*2.67**2)/qchisq(1-0.126,18-1))
+
+```
+
+
+
+
+
+
+
+
+

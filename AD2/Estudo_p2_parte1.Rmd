@@ -1,0 +1,257 @@
+*## Inferência-----------------------------------------------------------------*
+
+  Consiste nos métodos usados para tomar decisões 
+ou tirar conclusões acerca de uma população, por 
+meio de informações contidas em uma amostra 
+aleatória retirada daquela população.
+
+  Enquanto na Probabilidade supõe-se que todos os 
+parâmetros da distribuição de probabilidades da 
+população são conhecidos, ocorre o oposto na 
+Inferência Estatística, cujo problema central é 
+utilizar dados observados para determinar os 
+parâmetros desconhecidos da população.
+
+OBS: Para que as inferências deêm certo, as amostras devem ser aleatórias
+
+Estatística é definida como sendo qualquer 
+função dos dados amostrais que não contenham 
+parâmetros desconhecidos.
+
+*## DADOS ---------------------------------------------------------------------*
+
+X¬ (equivale ao X com tracinho em cima) = Média Amostral
+S² = Variância Amostral (Estatística)
+S = Desvio Padrão Amostral (Estatística)
+P^ = Proporção Amostral (Estatística)
+X~ = Mediana Amostral
+Xmax - Xmin = Amplitude Amostral
+T = X1 + X2 + .. + Xn = Total Amostral
+μ = Média (Da população) (Parâmetro Desconhecido)
+σ² = Variância (Parâmetro Desconhecido)
+σ = Desvio Padrão (Parâmetro Desconhecido)
+α = Limite
+Z = (X - μ)/σ
+(1 - α) = Intervalo de confiança
+100*(1 - α)% = Probabilidade de conter o verdadeiro valor do parâmetro populacional seno estimado
+α = P(rejeitar H0 | H0 é verdadeiro)
+β = P(falhar em rejeitar H0 | H0 é falso)
+1 - β = potência do teste = P(rejeitar H0 | H0 é falsa)
+
+*------------------------------------------------------------------------------*
+
+A distribuição de probabilidade de uma estatística  é chamada de distribuição
+amostral.
+
+*## A ideia básica da Inferência:----------------------------------------------*
+
+Dados os valores da amostra e o conhecimento a priori da distribuição amostral
+da estatística de interesse; Descobrir ou fazer afirmações a respeito dos 
+parâmetros desconhecidos da população
+
+*## Estimação Pontual ---------------------------------------------------------*
+
+É um único valor númerico de uma estatística para uma amostra particular
+Como a estimativa pontual depende da amostra e muitas amostras distintas são 
+possíveis, a estimativa pontual é uma variável aleatória
+
+O erro-padrão de um estimador é o seu desvio padrão. Se o erro-padrão envolver 
+parâmetros desconhecidos que possam ser estimados, então temos um erro-padrão 
+estimado
+
+Exemplo:
+
+σx¬ = σ/sqrt(n) : Erro-padrão da média amostral
+σ^x¬ = S/sqrt(n) : Erro-padrão estimado da média amostral
+
+*## Intervalo de Confiança-----------------------------------------------------*
+
+(1 - α) = Intervalo de confiança
+100*(1 - α)% = Probabilidade de conter o verdadeiro valor do parâmetro populacional sendo estimado
+
+Assim, por exemplo, um I.C. 95% significa que se 
+forem coletadas 100 amostras aleatórias 
+diferentes, em média 95 delas conterão o valor 
+verdadeiro do parâmetro sendo estimado.
+
+Como em qualquer estudo só se coleta uma uma amostra, há uma chance
+de 5% de se chegar ao resultado errado!
+
+Exemplos de intervalos de confiança:
+
+Bilateral (para média da população): 20 <= μx <= 30
+Unilateral Superior (para a média da população): -∞ <= μx <= 10 ou μx <= 10
+Unilateral Inferior (para a média da população): 15 <= μx < +∞ ou μx >= 15
+
+*------------------------------------------------------------------------------*
+
+*Testes de Hipótese -----------------------------------------------------------*
+
+# Teste Bilateral:
+H0: μx = 50
+H1: μx != 50
+
+# Teste Unilateral Superior:
+H0: μx = 10
+H1: μx > 10
+
+# Teste Unilateral Inferior:
+H0: μx = 15
+H1: μx < 15
+
+Sendo:
+H0 -> Hipótese Nula
+H1 -> Hipótese Alternativa
+
+Exemplo:
+
+H0: O réu é inocente
+H1: O réu é culpado
+
+          O Acusado é Inocente            O Acusado é Culpado
+ 
+Soltar:      Nenhum Erro                    Soltou um Culpado
+
+Prender:     Prendeu um inocente            Nenhum Erro
+
+
+
+                H0 é Verdadeira              H0 é falsa
+         
+Aceitar H0:    Nenhum Erro                 Erro do Tipo II
+
+Rejeitar H0:    Erro do Tipo I            Nenhum Erro
+
+
+α = P(rejeitar H0 | H0 é verdadeiro)
+β = P(falhar em rejeitar H0 | H0 é falso)
+1 - β = potência do teste = P(rejeitar H0 | H0 é falsa)
+
+
+Como o erro do Tipo I é fixado a priori, rejeitar H0 é 
+uma conclusão bem mais forte que o contrário. Provar 
+que H0 é falsa é mais “simples” que provar que ela é 
+verdadeira.
+
+Para provar que H0 é verdadeira, devo mostrar que o 
+erro do Tipo II é baixo (por exemplo menor que 0,2)
+
+Quando não rejeitamos H0, dizemos que se falhou em 
+rejeitar H0 ao invés de que a aceitamos
+
+Logo, um teste de hipótese deve ser construído de 
+forma a se tentar rejeitar H0
+
+
+*## Valor P -------------------------------------------------------------------*
+
+É a probabilidade de se obter uma estatística de 
+teste igual ou mais extrema que aquela observada 
+em uma amostra supondo a hipótese nula (H0) verdadeira
+
+É o menor nível de significância que leva à rejeição 
+da hipótese nula (H0)
+
+Exemplo (se α for fixado a 0,05)
+
+valor p < 0,05 => rejeitar H0
+valor p > 0,05 => falha-se em rejeitar H0
+
+*## Intervalo de Confiança versus Teste de Hipótese ---------------------------*
+
+Há uma estreita relação entre os intervalos de 
+confiança e seus respectivos testes de hipótese, caso 
+se utilize o mesmo α:
+
+   Sempre que o intervalo de confiança contiver a 
+   hipótese nula, falha-se em rejeitá-la
+   
+   Alternativamente, se o intervalo de confiança não 
+   passar por H0, rejeita-se a hipótese nula
+
+
+*## Exemplo 01 ----------------------------------------------------------------*
+
+Suponha que se desconfie que certa moeda seja 
+viciada no sentido de sair mais caras. A moeda é 
+lançada 8 vezes e saem 7 caras. Qual é a 
+conclusão?
+
+Neste problema, tem-se uma população que segue 
+uma distribuição de Bernoulli. Isto é, a população 
+tem apenas 2 categorias: Sucesso/1 (“cara”) com 
+probabilidade p e Fracasso/0 (“coroa”) com 
+probabilidade 1 – p . Por meio de amostragem (8 
+lançamentos da moeda), deseja-se inferir p.
+
+O procedimento é o seguinte
+
+Passo 1: montam-se as hipóteses
+
+  H0: a moeda é honesta (p = 0,5)
+  H1: a moeda é viciada (p > 0,5)
+
+Passo 2: arbitra-se uma probabilidade que fixa o 
+limite entre o provável e o improvável. Por 
+exemplo, 5%. Este é o erro do tipo I (α).
+
+Passo 3: supõe-se H0 verdadeira e calcula-se a 
+probabilidade de um evento tão ou mais extremo 
+ocorrer sob esta hipótese.
+
+Como nos 8 lançamentos da moeda: (i) só há 2 
+resultados possíveis, (ii) as repetições são 
+independentes e (iii) a probabilidade do sucesso é 
+constante, então a soma da quantidade de caras (total 
+amostral) segue uma distribuição binomial com 
+parâmetros p = 0,5 e n = 8.
+
+Isto é, sob H0 , a estatística total amostral tem uma 
+distribuição amostral conhecida, deduzida da 
+distribuição da população.
+
+Isso ilustra a diferença entre distribuição da população 
+e distribuição amostral.
+
+Uma vez que a distribuição da população (Bernoulli) e 
+a distribuição amostral (Binomial) tem a probabilidade 
+p em comum, é possível determinar p da população a 
+partir da amostra
+
+Como o total amostral (T) tem uma distribuição 
+conhecida (binomial com p = 0,5 e n = 8), fica possível 
+executar o passo 3:
+
+  Supõe-se H0 verdadeira e calcula-se a probabilidade de 
+  um evento tão ou mais extremo ocorrer sob esta hipótese.
+
+Ou seja, dado que a moeda é honesta, qual a 
+probabilidade de saírem 7 ou mais caras (devido 
+ao sinal de H1: >) em 8 lançamentos?
+
+Se H0 for verdadeira, esta probabilidade é:
+
+  P(T >= 7 | p = 0,5) = (8 :/ 7) · 0,5^7 · 0,5^1 + (8 :/ 8) · 0,5^8 · 0,5^0  ≅ 0,035
+  
+  Essa probabilidade é o valor-p do teste.
+
+Passo 4: conclusão
+
+  Como esta probabilidade é menor que α (0,05), este é 
+  um evento improvável (por esse padrão), logo coloca
+  se em dúvida a veracidade de H0.
+
+  Ou seja, rejeita-se H0 e conclui-se que a moeda é 
+  viciada no sentido de sair mais caras
+
+*------------------------------------------------------------------------------*
+
+
+
+
+
+
+
+
+
+
