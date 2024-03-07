@@ -1,0 +1,235 @@
+OBS: A prova caíra Teste t e Teste F (2 populações)
+
+OBS: Nâo veremos o caso no "teste t" que a variância das duas populações são iguais
+
+*## Teste t ==========================================================================*
+
+No "teste t" oque buscamos seria "mi1" e "mi2", também não temos "sigma1" nem "sigma2",
+porém não é oque estamos buscando
+
+
+Passo 1: Montar as hipóteses
+
+# Unilateral Inferior
+  
+  H0: mi1 - mi2 = Delta0
+  H1: mi1 - mi2 < Delta0
+  
+# Unilateral Superior
+
+  H0: mi1 - mi2 = Delta0
+  H1: mi1 - mi2 > Delta0
+
+# Bilateral
+
+  H0: mi1 - mi2 = Delta0
+  H1: mi1 - mi2 != Delta0
+  
+## Usamos delta0 = 0
+
+
+Passo 2: Nível de significância
+
+
+Passo 3: Supõe-se H0 verdadeira e calcula-se a probabilidade de um evento tão ou mais
+extremo ocorrer sob esta hipótese 
+
+t0 --> H1 < : P(x <= t0) --> pt(t0, v)
+   --> H1 > : P(x >= t0) --> pt(t0, v, lower=FALSE)
+   --> H1 != : 2*P(x >= |t0|) --> 2 x pt(t0, v, lower=FALSE)
+   
+No "teste t" usamos "pt()" como probabilidade no código R
+
+
+# Exercício 02 =======================================================================
+
+n1 = 16
+x1¬ = 19
+s1 = 1,3
+
+n2 = 14
+x2¬ = 17
+s2 = 1,2
+
+# A) Como o exercício pede para comparamos os dois ao mesmo tempo, por mais que tenha "menor"
+no enunciado, usaremos o != (bilateral)
+
+alpha = 0,05
+
+H1: mi1 != m2 --> mi1 - mi2 != 0
+
+H0: mi1 - mi2 = 0
+H1: mi1 - mi2 != 0
+
+V = (1.3^2/16 + 1.2^2/14)^2 / ((1.3^2/16)^2/(16-1) + (1.2^2/14)^2/(14-1))
+
+```{r}
+vnum = (1.3^2/16 + 1.2^2/14)^2
+vnum # 0.0434648
+
+vden = (1.3^2/16)^2/(16-1) + (1.2^2/14)^2/(14-1)
+vden # 0.001557591
+
+v = vnum/vden
+v # 27.90515
+```
+
+t0 = (19-17-0)/sqrt(1.3^2/16 + 1.2^2/14)
+
+```{r}
+t0 = (19-17-0)/sqrt(1.3^2/16 + 1.2^2/14)
+t0 # 4.380216
+```
+
+# Fazendo a probabilidade (valor-p):
+
+OBS: abs() serve para determinar módulo
+
+```{r}
+valorp = 2*pt(abs(t0), v, lower=FALSE)
+valorp # 0.0001514319
+```
+
+Conclusão: Rejeita-se H0 (P < alpha), ou seja, há evidências que um dos medicamentos 
+tem tempo médio de cura menor (medicamento 2)
+
+
+# B) Determinar o intervalo de confiança bilateral 95%
+
+19 - 17 + qt(0.05/2, v) * sqrt((1.3^2/16 + 1.2^2/14)) <= m1 - m2 <= 19 - 17 + qt((1-0.05/2), v) * sqrt((1.3^2/16 + 1.2^2/14))
+
+```{r}
+19 - 17 + qt(0.05/2, v) * sqrt((1.3^2/16 + 1.2^2/14)) # 1.064557
+19 - 17 + qt((1-0.05/2), v) * sqrt((1.3^2/16 + 1.2^2/14)) # 2.935443
+```
+
+Ou seja, m1 - m2 está entre 1,064557 e 2,935443
+
+===========================================================================================================
+
+Quando temos os dados brutos o R nos dá uma função propria para fazer as análises
+(não vai cair dessa forma na prova)
+
+t.test(x, y, ...)
+
+com argumentos determinados
+
+tipo de IC e hipótese alternativa H1:
+  
+  alternative=c("less") -> H1 < e IC Superior
+  alternative=c("greater") -> H1 > e IC Inferior
+  alternative=c("two.sided") -> H1 != e IC Bilateral
+
+Valor de Delta0
+  
+  mu = 
+
+Nível de Confiança: 1 - alpha do IC
+
+  conf.level = 
+  
+Variâncias iguais (TRUE) ou diferentes (FALSE)
+
+  var.equal = (por padrão é FALSE)
+
+
+# Exercício 03 ===================================================================================
+
+n1 = 20
+x1¬ = mean(M)
+S1 = sd(M)
+
+n2 = 20
+x2¬ = mean(H)
+S2 = sd(H)
+
+```{r}
+M = c(161.4, 167.3, 153.8, 157.2, 168.5, 154.3, 147.5, 167.6, 
+156.6, 161.1, 147.0, 152.4, 154.3, 148.8, 165.9, 149.5, 158.4, 
+161.1, 154.0, 161.8)
+
+H = c(193.9, 173.7, 182.7, 180.0, 175.0, 184.7, 164.4, 182.8, 
+165.6, 175.0, 173.0, 171.4, 165.0, 169.6, 160.5, 182.1, 178.1, 
+175.9, 176.9, 163.9)
+
+x1 = mean(M)
+x1 # 157.425
+
+s1 = sd(M)
+s1 # 6.779216
+
+x2 = mean(H)
+x2 # 174.71
+
+s2 = sd(H)
+s2 # 8.401685
+
+```
+
+# A)
+
+alpha = 0.01
+
+Será -10 visto que m1 - m2 daria um número negativo ja que m2 é maior que m1 (por expectativa, não por dados)
+
+H0: mi1 - mi2 = -10
+H1: mi1 - mi2 < -10
+
+v = (var(M)/20 + var(H)/20)^2 / ((var(M)/20)^2/(20-1) + (var(H)/20)^2/(20-1))
+```{r}
+v = (var(M)/20 + var(H)/20)^2 / ((var(M)/20)^2/(20-1) + (var(H)/20)^2/(20-1))
+v # 36.37535
+```
+
+t0 = (x1 - x2 + 10) / sqrt(var(M)/20 + var(H)/20)
+```{r}
+t0 = (x1 - x2 + 10) / sqrt(var(M)/20 + var(H)/20)
+t0 # -3.017837
+```
+
+valor-p = P(x <= t0)
+valorp = pt(t0, v)
+```{r}
+valorp = pt(t0, v)
+valorp # 0.002314636
+```
+
+Conclusão: Rejeita-se H0 (valorp < alpha), ou seja, há evidências de H1 a média da altura
+das mulheres é em média 10cm menor que a dos homens
+
+
+# Usando t.test
+```{r}
+t.test(M, H, alternative=c("less"), mu = -10, conf.level = 0.99)
+```
+Sendo:
+  
+  v = df
+  t0 = t
+  valor-p = p-value
+  ic superior = -inf
+  ic inferior = inf
+  ic bilteral = aparecerá dois valores ali
+
+# B) Queremos o IC Supeior de 99%
+
+mi1 - mi2 = mean(M) - mean(H) + qt(0.99, v) * sqrt(var(M)/20 + var(H)/20)
+```{r}
+mean(M) - mean(H) + qt(0.99, v) * sqrt(var(M)/20 + var(H)/20) # -11.41099
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
