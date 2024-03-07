@@ -112,6 +112,9 @@ Quando temos os dados brutos o R nos dá uma função propria para fazer as aná
 
 t.test(x, y, ...)
 
+sendo x = vetor da amostra 1
+y = vetor da amostra 2
+
 com argumentos determinados
 
 tipo de IC e hipótese alternativa H1:
