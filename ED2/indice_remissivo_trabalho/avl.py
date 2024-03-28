@@ -1,6 +1,5 @@
 from node import Node
 
-ROOT = "ROOT"
 
 class AVL:
     def __init__(self, data=None, node=None):
@@ -13,7 +12,7 @@ class AVL:
             self.root = None
 
     def __height(self, node):
-        if node == None:
+        if node is None:
             return -1
         else:
             return node.height
@@ -57,16 +56,30 @@ class AVL:
 
         return A
 
-    def insert(self, elem, current=ROOT):
-        if current == ROOT:
-            current = self.root
+    def search(self, elem):
+        # Se não houver nenhum nó na árvore (retornar false)
+        if self.root is None:
+            return False
 
-        if current == None:
+        current = self.root
+        while current is not None:
+            if current.data == elem:
+                return True
+
+            if elem > current.data:
+                current = current.right
+            else:
+                current = current.left
+
+        return False
+
+    def __insert(self, elem, current):
+        if current is None:
             new = Node(elem)
             return new
         else:
             if elem < current.data:
-                current.left = self.insert(current.left, elem)
+                current.left = self.__insert(current.left, elem)
                 if self.balancingFactor(current) >= 2:
                     if elem < current.left.data:
                         current = self.rotationLL(current)
@@ -74,7 +87,7 @@ class AVL:
                         current = self.rotationLR(current)
 
             else:
-                current.right = self.insert(current.right, elem)
+                current.right = self.__insert(current.right, elem)
                 if self.balancingFactor(current) >= 2:
                     if elem > current.right.data:
                         current = self.rotationRR(current)
@@ -84,3 +97,12 @@ class AVL:
             current.height = self.bigger(self.__height(current.left), self.__height(current.right)) + 1
 
             return current
+
+    def insert(self, elem):
+        if self.search(elem):
+            return False
+        else:
+            self.root = self.__insert(self.root, elem)
+            return True
+
+
