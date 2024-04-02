@@ -1,0 +1,12 @@
+Índice:
+as 1, 2
+bem 3
+eai 3
+oi 1, 2
+tudo 3
+Total de palavras: 7
+Total de palavras distintas: 5
+Total de palavras descartadas: 2
+Tempo de construção da árvore: 0.0 segundos
+Total de rotações LL e RR: 1
+Total de rotações LR e RL: 1

@@ -1,6 +1,8 @@
-class Node:
-    def __init__(self, data):
-        self.data = data
-        self.height = 0
-        self.left = None
-        self.right = None
+
+class NO:
+    def __init__(self, info):
+        self.info = info
+        self.lista_linha = []
+        self.altura = 0
+        self.esq = None
+        self.dir = None
