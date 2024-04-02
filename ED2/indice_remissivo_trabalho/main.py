@@ -8,8 +8,8 @@ with open('as_andorinhas.txt', mode='r', encoding='utf-8') as arq:
     palavras_distintas = 0
     palavras_totais = 0
     palavras_descartadas = 0
-
     tempo_inicio = time.time()
+
     for line in arq:
         for word in line.split():
             word = "".join(c for c in word if c.isalpha())
@@ -30,12 +30,10 @@ with open('as_andorinhas.txt', mode='r', encoding='utf-8') as arq:
 
 tempo_construcao = round(tempo_fim - tempo_inicio, 15)
 
-tree.emOrdem()
+tree.indice()
 indice = tree.arqtxt
 rotacoes_ll_rr = tree.rotacoes_ll_rr
 rotacoes_lr_rl = tree.rotacoes_lr_rl
-
-
 
 with open('indices.txt', 'w', encoding='utf-8') as narq:
     narq.write(f'Índice:\n')
@@ -48,3 +46,8 @@ with open('indices.txt', 'w', encoding='utf-8') as narq:
     narq.write(f'Tempo de construção da árvore: {tempo_construcao} segundos\n')
     narq.write(f'Total de rotações LL e RR: {rotacoes_ll_rr}\n')
     narq.write(f'Total de rotações LR e RL: {rotacoes_lr_rl}\n')
+
+
+tree.buscaME(input('Digite a palavra que deseja buscar:'))
+
+print(tree.palavra_mais_vista_em_linhas_diferentes())

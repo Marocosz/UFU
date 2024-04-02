@@ -1,12 +1,10 @@
 Índice:
-as 1, 2
-bem 3
-eai 3
-oi 1, 2
-tudo 3
-Total de palavras: 7
-Total de palavras distintas: 5
-Total de palavras descartadas: 2
+alo 1, 1, 1, 1, 2, 2
+amor 3, 3, 4, 4, 4
+oi 5, 5, 5
+Total de palavras: 14
+Total de palavras distintas: 3
+Total de palavras descartadas: 9
 Tempo de construção da árvore: 0.0 segundos
 Total de rotações LL e RR: 1
-Total de rotações LR e RL: 1
+Total de rotações LR e RL: 0
