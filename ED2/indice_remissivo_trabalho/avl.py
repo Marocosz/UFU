@@ -7,6 +7,7 @@ class AVL:
         self.rotacoes_ll_rr = 0
         self.rotacoes_lr_rl = 0
         self.arqtxt = []
+        self.mais_aparece = None
 
     def __altura(self, no):
         if no is None:
@@ -114,7 +115,6 @@ class AVL:
 
         return self.ME_(-1, None)
 
-
     def ME_(self, valor, medidor):
       if valor == 0:
         print('O valor de ME é 0')
@@ -135,7 +135,8 @@ class AVL:
         atual = self.__raiz
         while atual is not None:
             if valor == atual.info:
-                atual.lista_linha.append(valorlista)
+                if valorlista not in atual.lista_linha:
+                    atual.lista_linha.append(valorlista)
 
             if valor > atual.info:
                 atual = atual.dir
@@ -169,13 +170,15 @@ class AVL:
         if self.__raiz is not None:
             self.__cria_indice(self.__raiz)
 
-    def __palavra_mais_vista_em_linhas_diferentes(self, no, tamanho):
-        if no is None:
-
-
-
-
+    def __palavra_mais_vista_em_linhas_diferentes(self, no, no_maior):
+        if no is not None:
+            self.__palavra_mais_vista_em_linhas_diferentes(no.esq, no_maior)
+            if len(no.lista_linha) > len(no_maior.lista_linha):
+                no_maior.lista_linha = no.lista_linha
+                self.mais_aparece = no.info
+            self.__palavra_mais_vista_em_linhas_diferentes(no.dir, no_maior)
 
     def palavra_mais_vista_em_linhas_diferentes(self):
         if self.__raiz is not None:
-            self.__palavra_mais_vista_em_linhas_diferentes(self.__raiz)
+            no_maior = NO(0)
+            self.__palavra_mais_vista_em_linhas_diferentes(self.__raiz, no_maior)

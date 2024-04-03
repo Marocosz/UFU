@@ -1,10 +1,47 @@
 Índice:
-alo 1, 1, 1, 1, 2, 2
-amor 3, 3, 4, 4, 4
-oi 5, 5, 5
-Total de palavras: 14
-Total de palavras distintas: 3
-Total de palavras descartadas: 9
+acho 4, 6
+agora 2, 12
+cantando 2
+com 3
+depois 13
+dizer 1
+dois 8
+emoções 10
+entre 10
+esperar 15
+estou 2
+eu 1
+fazer 11
+importa 13
+mas 6
+melhor 5, 8
+não 5, 12, 13
+nós 8
+outra 3
+ouvir 3
+pena 11
+pessoa 3
+poderíamos 7
+por 14
+posso 1, 15
+pra 2, 5, 8
+que 1, 4, 5, 7, 9
+quero 9
+razões 10
+saiba 9
+saída 11
+se 2, 12
+ser 7
+sou 5
+só 9
+valer 11
+vezes 4, 6
+você 2, 5, 14
+às 4, 6
+Total de palavras: 57
+Total de palavras distintas: 39
+Total de palavras descartadas: 8
 Tempo de construção da árvore: 0.0 segundos
-Total de rotações LL e RR: 1
-Total de rotações LR e RL: 0
+Total de rotações LL e RR: 17
+Total de rotações LR e RL: 10
+Palavra mais repetida: que

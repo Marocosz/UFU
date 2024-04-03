@@ -35,6 +35,9 @@ indice = tree.arqtxt
 rotacoes_ll_rr = tree.rotacoes_ll_rr
 rotacoes_lr_rl = tree.rotacoes_lr_rl
 
+tree.palavra_mais_vista_em_linhas_diferentes()
+mais_aparece = tree.mais_aparece
+
 with open('indices.txt', 'w', encoding='utf-8') as narq:
     narq.write(f'Índice:\n')
     for linha in indice:
@@ -46,8 +49,9 @@ with open('indices.txt', 'w', encoding='utf-8') as narq:
     narq.write(f'Tempo de construção da árvore: {tempo_construcao} segundos\n')
     narq.write(f'Total de rotações LL e RR: {rotacoes_ll_rr}\n')
     narq.write(f'Total de rotações LR e RL: {rotacoes_lr_rl}\n')
+    narq.write(f'Palavra mais repetida: {mais_aparece}')
 
 
 tree.buscaME(input('Digite a palavra que deseja buscar:'))
+tree.palavra_mais_vista_em_linhas_diferentes()
 
-print(tree.palavra_mais_vista_em_linhas_diferentes())
