@@ -41,7 +41,7 @@ você 2, 5, 14
 Total de palavras: 57
 Total de palavras distintas: 39
 Total de palavras descartadas: 8
-Tempo de construção da árvore: 0.0 segundos
+Tempo de construção da árvore: 0.001508712768555 segundos
 Total de rotações LL e RR: 17
 Total de rotações LR e RL: 10
 Palavra mais repetida: que
