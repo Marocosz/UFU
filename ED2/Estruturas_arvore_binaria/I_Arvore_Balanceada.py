@@ -37,10 +37,10 @@ class AVL:
         if node == None:
             return -1
         else:
-            return node.altura
+            return node.height
 
     def __fatorBalanceamento(self, no):
-        return abs(self.__altura(no.esq) - self.__altura(no.dir))
+        return abs(self.__altura(no.left) - self.__altura(no.right))
 
     def __maior(self, x, y):
         if (x > y):
@@ -49,32 +49,32 @@ class AVL:
             return y
 
     def __RotacaoLL(self, A):
-        print('RotacaoLL: ', A.info);
-        B = A.esq
-        A.esq = B.dir
-        B.dir = A
-        A.altura = self.__maior(self.__altura(A.esq), self.__altura(A.dir)) + 1
-        B.altura = self.__maior(self.__altura(B.esq), A.altura) + 1
+        print('RotacaoLL: ', A.data);
+        B = A.left
+        A.left = B.right
+        B.right = A
+        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
+        B.height = self.__maior(self.__altura(B.left), A.height) + 1
         # A = B
         return B
 
     def __RotacaoRR(self, A):
-        print('RotacaoRR: ', A.info);
-        B = A.dir
-        A.dir = B.esq
-        B.esq = A
-        A.altura = self.__maior(self.__altura(A.esq), self.__altura(A.dir)) + 1
-        B.altura = self.__maior(self.__altura(B.dir), A.altura) + 1
+        print('RotacaoRR: ', A.data);
+        B = A.right
+        A.right = B.left
+        B.left = A
+        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
+        B.height = self.__maior(self.__altura(B.right), A.height) + 1
         # A = B
         return B
 
     def __RotacaoLR(self, A):
-        A.esq = self.__RotacaoRR(A.esq)
+        A.left = self.__RotacaoRR(A.left)
         A = self.__RotacaoLL(A)
         return A
 
     def __RotacaoRL(self, A):
-        A.dir = self.__RotacaoLL(A.dir)
+        A.right = self.__RotacaoLL(A.right)
         A = self.__RotacaoRR(A)
         return A
 
@@ -83,17 +83,17 @@ class AVL:
             novo = Node(valor)
             return novo
         else:
-            if valor < atual.info:
-                atual.esq = self.__insereValor(atual.esq, valor)
+            if valor < atual.data:
+                atual.left = self.__insereValor(atual.left, valor)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if valor < atual.esq.info:
+                    if valor < atual.left.info:
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
             else:
-                atual.dir = self.__insereValor(atual.dir, valor)
+                atual.right = self.__insereValor(atual.right, valor)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if valor > atual.dir.info:
+                    if valor > atual.right.info:
                         atual = self.__RotacaoRR(atual)
                     else:
                         atual = self.__RotacaoRL(atual)
@@ -114,38 +114,38 @@ class AVL:
 
         atual = self.__raiz
         while atual != None:
-            if valor == atual.info:
+            if valor == atual.data:
                 return True
 
-            if valor > atual.info:
-                atual = atual.dir
+            if valor > atual.data:
+                atual = atual.right
             else:
-                atual = atual.esq
+                atual = atual.left
 
         return False
 
     def __procuraMenor(self, atual):
         no1 = atual
-        no2 = atual.esq
+        no2 = atual.left
         while no2 != None:
             no1 = no2
-            no2 = no2.esq
+            no2 = no2.left
         return no1
 
     def __removeValor(self, atual, valor):
-        if atual.info == valor:  # achou o nó a ser removido
-            if atual.esq == None or atual.dir is None:  # nó tem 1 filho ou nenhum
-                if atual.esq != None:
-                    atual = atual.esq
+        if atual.data == valor:  # achou o nó a ser removido
+            if atual.left == None or atual.right is None:  # nó tem 1 filho ou nenhum
+                if atual.left != None:
+                    atual = atual.left
                 else:
-                    atual = atual.dir
+                    atual = atual.right
 
             else:  # nó tem 2 filhos
-                temp = self.__procuraMenor(atual.dir)
-                atual.info = temp.info
-                atual.dir = self.__removeValor(atual.dir, atual.info)
+                temp = self.__procuraMenor(atual.right)
+                atual.data = temp.info
+                atual.right = self.__removeValor(atual.right, atual.data)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if self.__altura(atual.esq.dir) <= self.__altura(atual.esq.esq):
+                    if self.__altura(atual.left.dir) <= self.__altura(atual.left.esq):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
@@ -154,17 +154,17 @@ class AVL:
                 atual.altura = self.__maior(self.__altura(atual.esq), self.__altura(atual.dir)) + 1
 
         else:  # procura o nó a ser removido
-            if valor < atual.info:
-                atual.esq = self.__removeValor(atual.esq, valor)
+            if valor < atual.data:
+                atual.left = self.__removeValor(atual.left, valor)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if self.__altura(atual.dir.esq) <= self.__altura(atual.dir.dir):
+                    if self.__altura(atual.right.left) <= self.__altura(atual.right.right):
                         atual = self.__RotacaoRR(atual)
                     else:
                         atual = self.__RotacaoRL(atual)
             else:
-                atual.dir = self.__removeValor(atual.dir, valor)
+                atual.right = self.__removeValor(atual.right, valor)
                 if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__altura(atual.esq.dir) <= self.__altura(atual.esq.esq)):
+                    if (self.__altura(atual.left.dir) <= self.__altura(atual.left.esq)):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
@@ -182,9 +182,9 @@ class AVL:
 
     def __preOrdem(self, raiz):
         if (raiz != None):
-            print(raiz.info)
-            self.__preOrdem(raiz.esq)
-            self.__preOrdem(raiz.dir)
+            print(raiz.data)
+            self.__preOrdem(raiz.left)
+            self.__preOrdem(raiz.right)
 
     def preOrdem(self):
         if (self.__raiz != None):
@@ -192,9 +192,9 @@ class AVL:
 
     def __emOrdem(self, raiz):
         if (raiz != None):
-            self.__emOrdem(raiz.esq)
-            print(raiz.info, end=' ')
-            self.__emOrdem(raiz.dir)
+            self.__emOrdem(raiz.left)
+            print(raiz.data, end=' ')
+            self.__emOrdem(raiz.right)
 
     def emOrdem(self):
         if (self.__raiz != None):
@@ -202,9 +202,9 @@ class AVL:
 
     def __posOrdem(self, raiz):
         if (raiz != None):
-            self.__posOrdem(raiz.esq)
-            self.__posOrdem(raiz.dir)
-            print(raiz.info)
+            self.__posOrdem(raiz.left)
+            self.__posOrdem(raiz.right)
+            print(raiz.data)
 
     def posOrdem(self):
         if (self.__raiz != None):
@@ -221,10 +221,10 @@ class AVL:
         if raiz is None:
             return
         if nivel == 0:
-            print(raiz.info, end=" ")
+            print(raiz.data, end=" ")
         elif nivel > 0:
-            self.__imprimeNivel(raiz.esq, nivel - 1)
-            self.__imprimeNivel(raiz.dir, nivel - 1)
+            self.__imprimeNivel(raiz.left, nivel - 1)
+            self.__imprimeNivel(raiz.right, nivel - 1)
 
     def alteraValNo(self):
         if (self.__raiz != None):
@@ -248,8 +248,8 @@ class AVL:
             return
         else:
             temp = raiz
-            self.__espelho(raiz.esq)
-            self.__espelho(raiz.dir)
-            temp = raiz.esq
-            raiz.esq = raiz.dir
-            raiz.dir = temp
+            self.__espelho(raiz.left)
+            self.__espelho(raiz.right)
+            temp = raiz.left
+            raiz.left = raiz.right
+            raiz.right = temp

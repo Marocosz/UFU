@@ -10,13 +10,13 @@ def pre_ordem(raiz):
         return
 
     # Visita nodo corrente.
-    print(raiz.info, end = " ")
+    print(raiz.data, end =" ")
 
     # Visita filho da esquerda.
-    pre_ordem(raiz.esq)
+    pre_ordem(raiz.left)
 
     # Visita filho da direita.
-    pre_ordem(raiz.dir)
+    pre_ordem(raiz.right)
 
 
 def em_ordem(raiz):
@@ -24,13 +24,13 @@ def em_ordem(raiz):
         return
 
     # Visita filho da esquerda.
-    em_ordem(raiz.esq)
+    em_ordem(raiz.left)
 
     # Visita nodo corrente.
-    print(raiz.info, end = " ")
+    print(raiz.data, end =" ")
 
     # Visita filho da direita.
-    em_ordem(raiz.dir)
+    em_ordem(raiz.right)
 
 
 def pos_ordem(raiz):
@@ -38,13 +38,13 @@ def pos_ordem(raiz):
         return
 
     # Visita filho da esquerda.
-    pos_ordem(raiz.esq)
+    pos_ordem(raiz.left)
 
     # Visita filho da direita.
-    pos_ordem(raiz.dir)
+    pos_ordem(raiz.right)
 
     # Visita nodo corrente.
-    print(raiz.info, end = " ")
+    print(raiz.data, end =" ")
 
 
 # =====================================================================================================================

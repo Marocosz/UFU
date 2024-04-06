@@ -7,7 +7,7 @@ class NO:
 
     # Representação de um nó - função para exibir na tela
     def __repr__(self):
-        return f'{self.esquerda and self.esquerda.info} <- {self.info} -> {self.direita and self.direita.info}'
+        return f'{self.esquerda and self.esquerda.data} <- {self.info} -> {self.direita and self.direita.data}'
 
 
     def buscaRec(self, valor):
@@ -79,7 +79,7 @@ class ArvBinBusca:
             raiz = novo
             return raiz
         else:
-            if (valor > raiz.info):
+            if (valor > raiz.data):
                 raiz.direita = self.__insereRec(raiz.direita, valor)
             else:
                 raiz.esquerda = self.__insereRec(raiz.esquerda, valor)
@@ -94,7 +94,7 @@ class ArvBinBusca:
         if raiz != None:
             # Visita filho da esquerda.
             self.__emOrdem(raiz.esquerda)
-            print(raiz.info, end=" ")
+            print(raiz.data, end=" ")
             # Visita filho da direita.
             self.__emOrdem(raiz.direita)
 
@@ -104,9 +104,9 @@ class ArvBinBusca:
 
         atual = self.__raiz
         while atual != None:
-            if valor == atual.info:
+            if valor == atual.data:
                 return True
-            if valor > atual.info:
+            if valor > atual.data:
                 atual = atual.direita
             else:
                 atual = atual.esquerda
@@ -122,7 +122,7 @@ class ArvBinBusca:
         if raiz == None:
             return 0
         else:
-            return self.__somaValores(raiz.esquerda) + raiz.info + self.__somaValores(raiz.direita)
+            return self.__somaValores(raiz.esquerda) + raiz.data + self.__somaValores(raiz.direita)
 
     def menor(self):
         if self.__raiz != None:
@@ -131,7 +131,7 @@ class ArvBinBusca:
 
     def __menor(self, raiz):
         if raiz.esquerda == None:
-            return raiz.info
+            return raiz.data
         else:
             return self.__menor(raiz.esquerda)
 

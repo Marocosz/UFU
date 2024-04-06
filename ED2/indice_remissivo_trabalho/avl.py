@@ -13,10 +13,10 @@ class AVL:
         if no is None:
             return -1
         else:
-            return no.altura
+            return no.height
 
     def __fatorBalanceamento(self, no):
-        return abs(self.__altura(no.esq) - self.__altura(no.dir))
+        return abs(self.__altura(no.left) - self.__altura(no.right))
 
     def __maior(self, x, y):
         if x > y:
@@ -25,32 +25,32 @@ class AVL:
             return y
 
     def __RotacaoLL(self, A):
-        B = A.esq
-        A.esq = B.dir
-        B.dir = A
-        A.altura = self.__maior(self.__altura(A.esq), self.__altura(A.dir)) + 1
-        B.altura = self.__maior(self.__altura(B.esq), A.altura) + 1
+        B = A.left
+        A.left = B.right
+        B.right = A
+        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
+        B.height = self.__maior(self.__altura(B.left), A.height) + 1
         self.rotacoes_ll_rr += 1
         return B
 
     def __RotacaoRR(self, A):
-        B = A.dir
-        A.dir = B.esq
-        B.esq = A
-        A.altura = self.__maior(self.__altura(A.esq), self.__altura(A.dir)) + 1
-        B.altura = self.__maior(self.__altura(B.dir), A.altura) + 1
+        B = A.right
+        A.right = B.left
+        B.left = A
+        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
+        B.height = self.__maior(self.__altura(B.right), A.height) + 1
         self.rotacoes_ll_rr += 1
         return B
 
     def __RotacaoLR(self, A):
-        A.esq = self.__RotacaoRR(A.esq)
+        A.left = self.__RotacaoRR(A.left)
         A = self.__RotacaoLL(A)
         self.rotacoes_lr_rl += 1
         self.rotacoes_ll_rr -= 1
         return A
 
     def __RotacaoRL(self, A):
-        A.dir = self.__RotacaoLL(A.dir)
+        A.right = self.__RotacaoLL(A.right)
         A = self.__RotacaoRR(A)
         self.rotacoes_lr_rl += 1
         self.rotacoes_ll_rr -= 1
@@ -63,19 +63,19 @@ class AVL:
             return novo
 
         else:
-            if valor < atual.info:
-                atual.esq = self.__insereValor(atual.esq, valor, valorlista)
+            if valor < atual.data:
+                atual.left = self.__insereValor(atual.left, valor, valorlista)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if valor < atual.esq.info:
+                    if valor < atual.left.info:
                         atual = self.__RotacaoLL(atual)
 
                     else:
                         atual = self.__RotacaoLR(atual)
 
             else:
-                atual.dir = self.__insereValor(atual.dir, valor, valorlista)
+                atual.right = self.__insereValor(atual.right, valor, valorlista)
                 if self.__fatorBalanceamento(atual) >= 2:
-                    if valor > atual.dir.info:
+                    if valor > atual.right.info:
                         atual = self.__RotacaoRR(atual)
 
                     else:
@@ -97,8 +97,8 @@ class AVL:
 
         atual = self.__raiz
         while atual is not None:
-            if valor == atual.info:
-                ME = self.num_elementos(atual.esq) - self.num_elementos(atual.dir)
+            if valor == atual.data:
+                ME = self.num_elementos(atual.left) - self.num_elementos(atual.right)
 
                 if ME == 0:
                     return self.ME_(0, ME)
@@ -107,11 +107,11 @@ class AVL:
 
                     return self.ME_(1,ME)
 
-            if valor > atual.info:
-                atual = atual.dir
+            if valor > atual.data:
+                atual = atual.right
 
             else:
-                atual = atual.esq
+                atual = atual.left
 
         return self.ME_(-1, None)
 
@@ -134,15 +134,15 @@ class AVL:
     def insere_lista_linha(self, valor, valorlista):
         atual = self.__raiz
         while atual is not None:
-            if valor == atual.info:
+            if valor == atual.data:
                 if valorlista not in atual.lista_linha:
                     atual.lista_linha.append(valorlista)
 
-            if valor > atual.info:
-                atual = atual.dir
+            if valor > atual.data:
+                atual = atual.right
 
             else:
-                atual = atual.esq
+                atual = atual.left
 
     def busca(self, valor):
         if self.__raiz is None:
@@ -150,21 +150,21 @@ class AVL:
 
         atual = self.__raiz
         while atual is not None:
-            if valor == atual.info:
+            if valor == atual.data:
                 return True
 
-            if valor > atual.info:
-                atual = atual.dir
+            if valor > atual.data:
+                atual = atual.right
             else:
-                atual = atual.esq
+                atual = atual.left
 
         return False
 
     def __cria_indice(self, raiz):
         if raiz is not None:
-            self.__cria_indice(raiz.esq)
-            self.arqtxt.append(raiz.info + " " + ', '.join(raiz.lista_linha))
-            self.__cria_indice(raiz.dir)
+            self.__cria_indice(raiz.left)
+            self.arqtxt.append(raiz.data + " " + ', '.join(raiz.lista_linha))
+            self.__cria_indice(raiz.right)
 
     def indice(self):
         if self.__raiz is not None:
@@ -172,11 +172,11 @@ class AVL:
 
     def __palavra_mais_vista_em_linhas_diferentes(self, no, no_maior):
         if no is not None:
-            self.__palavra_mais_vista_em_linhas_diferentes(no.esq, no_maior)
+            self.__palavra_mais_vista_em_linhas_diferentes(no.left, no_maior)
             if len(no.lista_linha) > len(no_maior.lista_linha):
                 no_maior.lista_linha = no.lista_linha
-                self.mais_aparece = no.info
-            self.__palavra_mais_vista_em_linhas_diferentes(no.dir, no_maior)
+                self.mais_aparece = no.data
+            self.__palavra_mais_vista_em_linhas_diferentes(no.right, no_maior)
 
     def palavra_mais_vista_em_linhas_diferentes(self):
         if self.__raiz is not None:
