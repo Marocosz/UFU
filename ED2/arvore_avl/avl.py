@@ -1,28 +1,56 @@
 from node import NO
 
+"""
+Árvore AVL é uma árvore binária com o objetivo de balancear a estrutura de forma "automática"
+de acordo com seu fator de balanceamento, ou seja, que a diferença máxima de altura das 
+sub-árvores esquerda e direita de cada nó, seja de no máximo UMA unidade, e para isso usamos 
+rotações, simples ou duplas, que são executadas a cada inserção ou remoção
+
+Custo máximo de qualquer algoritmo é O(Log N)
+
+O Fato de balanceamento deve ser +1, 0 ou -1
+Se Fb > 1 ou < -1, a árvore deve ser balanceada naquele nó
+
+=====================================================================================================================
+
+Rotações são aplicadas no ancestral mais próximo do nó inserido cujo fator de balanceamento passa a ser +2 ou -2
+
+
+"""
 
 class AVL:
     def __init__(self):
         self.__raiz = None
 
-
+    # Função para ter acesso a altura do nó qualquer
     def __altura(self, no):
         if no is None:
+            # Já definimos a altura de um nó não existente como "-1"
             return -1
         else:
             return no.height
 
+    # Função para termos acesso ao fator de balanceamento (altura da esquerdo - altura da direita) de um nó qualquer
     def __fatorBalanceamento(self, no):
         return abs(self.__altura(no.left) - self.__altura(no.right))
 
+    # Função básica que determina qual maior valor entre 2 valores
     def __maior(self, x, y):
         if x > y:
             return x
         else:
             return y
 
+    """
+    Rotação Simples a Direita
+    
+    Um novo nó é inserido na sub-árvore da esuqerda do filho esquerdo de A
+    Assim, A é o nó desbalanceado
+    Faremos dois movimentos para a esquerda: Left Left
+    
+    
+    """
     def __RotacaoLL(self, A):
-        print('RotacaoLL: ', A.data);
         B = A.left
         A.left = B.right
         B.right = A
