@@ -1,0 +1,36 @@
+```{r}
+y = c(401, 395, 449, 412, 399, 390, 427, 407, 398, 346, 378, 419, 409, 419, 396, 431, 402, 373, 396, 379, 402, 409, 386, 384, 417, 434, 401, 429, 419, 405, 374, 434, 407, 429, 436, 403, 394, 434, 410, 389, 429, 431, 434, 410, 398, 394, 408, 383)
+x = factor(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3))
+
+stripchart(y ~ x, method = "stack", pch = 20, vertical = TRUE)
+tapply(y, x, mean)
+tapply(y, x, sd)
+### Ajuste do Modelo:
+mod = aov(y ~ x)
+summary(mod)
+```
+
+
+```{r}
+##### Exercício 1
+### Teste exato e IC de Clopper-Pearson
+binom.test(x=145, n=1947, p=0.086, alternative = c("two.sided"), conf.level = 0.95)
+### Teste aproximado e IC de Wilson sem correção de continuidade
+prop.test(x=145, n=1947, p=0.086, alternative = c("two.sided"), conf.level = 0.95, correct = FALSE)
+```
+
+
+
+
+```{r}
+##### Exercício 3
+### Teste aproximado sem correção de continuidade e IC de Wald
+prop.test(x=c(39,37), n=c(330,330), alternative = c("greater"), conf.level = 0.917, correct = FALSE)
+```
+
+```{r}
+##### Exercício 4
+### Teste aproximado sem correção de continuidade e IC de Wald
+prop.test(x=c(33,110), n=c(200745,201229), alternative = c("greater"), conf.level = 0.999, correct = FALSE)
+```
+

@@ -23,7 +23,7 @@ class AVL:
         self.__raiz = None
 
     # Função para ter acesso a altura do nó qualquer
-    def __altura(self, no):
+    def __height(self, no):
         if no is None:
             # Já definimos a altura de um nó não existente como "-1"
             return -1
@@ -32,7 +32,7 @@ class AVL:
 
     # Função para termos acesso ao fator de balanceamento (altura da esquerdo - altura da direita) de um nó qualquer
     def __fatorBalanceamento(self, no):
-        return abs(self.__altura(no.left) - self.__altura(no.right))
+        return abs(self.__height(no.left) - self.__height(no.right))
 
     # Função básica que determina qual maior valor entre 2 valores
     def __maior(self, x, y):
@@ -45,35 +45,78 @@ class AVL:
     Rotação Simples a Direita
     
     Um novo nó é inserido na sub-árvore da esuqerda do filho esquerdo de A
+    
     Assim, A é o nó desbalanceado
     Faremos dois movimentos para a esquerda: Left Left
     
-    
+    É necessário fazer uma rotação à direita, de modo que  o nó intermediário B ocupe o 
+    lugar de A, e A se torne  a sub-árvore direita de B e a subárvore da direita de B vira
+    subrárvore da esquerda de A
     """
     def __RotacaoLL(self, A):
         B = A.left
         A.left = B.right
         B.right = A
-        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
-        B.height = self.__maior(self.__altura(B.left), A.height) + 1
+        A.height = self.__maior(self.__height(A.left), self.__height(A.right)) + 1
+        B.height = self.__maior(self.__height(B.left), A.height) + 1
         # A = B
         return B
 
+    """
+    Rotação Simples a Esquerda
+
+    Um novo nó é inserido na sub-árvore da direita do filho direito de A
+    
+    Assim, A é o nó desbalanceado
+    Faremos dois movimentos para a esquerda: Right Right
+
+    É necessário fazer uma rotação à esquerda, de modo que  o nó intermediário B ocupe o 
+    lugar de A, e A se torne  a sub-árvore esquerda de B e a subárvore da esquerda de B vira
+    subrárvore da direita de A
+    """
+
     def __RotacaoRR(self, A):
-        print('RotacaoRR: ', A.data);
         B = A.right
         A.right = B.left
         B.left = A
-        A.height = self.__maior(self.__altura(A.left), self.__altura(A.right)) + 1
-        B.height = self.__maior(self.__altura(B.right), A.height) + 1
+        A.height = self.__maior(self.__height(A.left), self.__height(A.right)) + 1
+        B.height = self.__maior(self.__height(B.right), A.height) + 1
         # A = B
         return B
 
+    """
+    Rotação Dupla à Direita
+    
+    Um nó é inserido na sub-árvore da direita do filho esquerdo de A
+    
+    Assim, A fica desbalanceado
+    Faremos um movimento para esquerda e outro para direita
+    
+    É necessário fazer uma rotação dupla, de modo que o nó C se torne pai dos nós A (filho da direita)
+    e B (filho da esquerda)
+    
+    - Rotação RR em B
+    - Rotação LL em A
+    """
     def __RotacaoLR(self, A):
         A.left = self.__RotacaoRR(A.left)
         A = self.__RotacaoLL(A)
         return A
 
+    """
+    Rotação Dupla à Esquerda
+
+    Um nó é inserido na sub-árvore da esquerda do filho direito de A
+
+    Assim, A fica desbalanceado
+    Faremos um movimento para direita e outro para esquerda
+
+    É necessário fazer uma rotação dupla, de modo que o nó C se torne pai dos nós A (filho da esquerda)
+    e B (filho da direita)
+
+    - Rotação LL em B
+    - Rotação RR em A
+    """ 
     def __RotacaoRL(self, A):
         A.right = self.__RotacaoLL(A.right)
         A = self.__RotacaoRR(A)
@@ -99,7 +142,7 @@ class AVL:
                     else:
                         atual = self.__RotacaoRL(atual)
 
-            atual.altura = self.__maior(self.__altura(atual.esq), self.__altura(atual.dir)) + 1
+            atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
             return atual
 
     def insere(self, valor):
@@ -146,31 +189,31 @@ class AVL:
                 atual.data = temp.info
                 atual.right = self.__removeValor(atual.right, atual.data)
                 if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__altura(atual.left.dir) <= self.__altura(atual.left.esq)):
+                    if (self.__height(atual.left.dir) <= self.__height(atual.left.esq)):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
 
             if (atual != None):
-                atual.altura = self.__maior(self.__altura(atual.esq), self.__altura(atual.dir)) + 1
+                atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
 
         else:  # procura o nó a ser removido
             if (valor < atual.data):
                 atual.left = self.__removeValor(atual.left, valor)
                 if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__altura(atual.right.left) <= self.__altura(atual.right.right)):
+                    if (self.__height(atual.right.left) <= self.__height(atual.right.right)):
                         atual = self.__RotacaoRR(atual)
                     else:
                         atual = self.__RotacaoRL(atual)
             else:
                 atual.right = self.__removeValor(atual.right, valor)
                 if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__altura(atual.left.dir) <= self.__altura(atual.left.esq)):
+                    if (self.__height(atual.left.dir) <= self.__height(atual.left.esq)):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
 
-            atual.altura = self.__maior(self.__altura(atual.esq), self.__altura(atual.dir)) + 1
+            atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
 
         return atual
 
@@ -212,7 +255,7 @@ class AVL:
             self.__posOrdem(self.__raiz)
 
     def emNivel(self):
-        h = self.__altura(self.__raiz)
+        h = self.__height(self.__raiz)
         for i in range(0, h + 1):
             self.__imprimeNivel(self.__raiz, i)
             print(' - nivel ', i)
