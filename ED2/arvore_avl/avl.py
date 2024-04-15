@@ -18,6 +18,7 @@ Rotações são aplicadas no ancestral mais próximo do nó inserido cujo fator 
 
 """
 
+
 class AVL:
     def __init__(self):
         self.__raiz = None
@@ -53,6 +54,7 @@ class AVL:
     lugar de A, e A se torne  a sub-árvore direita de B e a subárvore da direita de B vira
     subrárvore da esquerda de A
     """
+
     def __RotacaoLL(self, A):
         B = A.left
         A.left = B.right
@@ -98,6 +100,7 @@ class AVL:
     - Rotação RR em B
     - Rotação LL em A
     """
+
     def __RotacaoLR(self, A):
         A.left = self.__RotacaoRR(A.left)
         A = self.__RotacaoLL(A)
@@ -116,109 +119,164 @@ class AVL:
 
     - Rotação LL em B
     - Rotação RR em A
-    """ 
+    """
+
     def __RotacaoRL(self, A):
         A.right = self.__RotacaoLL(A.right)
         A = self.__RotacaoRR(A)
         return A
 
+    """
+    
+    """
+
     def __insereValor(self, atual, valor):
-        if (atual == None):  # árvore vazia ou nó folha
+
+        # Em algum momento, como essa função é recursiva, aqui, será o "stop" da função, que será quando
+        # não houver mais um nó, assim, retornando um nó com o valor desejado
+        if atual is None:  # árvore vazia ou nó folha
             novo = NO(valor)
             return novo
+
+        # Se o nó existir:
         else:
-            if (valor < atual.data):
+            # Nessa parte, vamos percorrer pela árvore até encontrar o local certo a ser adiconado o nó
+            if valor < atual.data:
+                # Aqui acontecerá a recursividade com o nó esquerdo do atual, vamos dar o valor ao filho
+                # esquerdo do último nó, sendo o novo nó que queremos adicionar
                 atual.left = self.__insereValor(atual.left, valor)
-                if (self.__fatorBalanceamento(atual) >= 2):
-                    if (valor < atual.left.data):
+
+                # Nessa parte, sempre verificaremos o fator de balanceamento, para caso seja maior ou
+                # igual a 2, fazemos uma rotação a fim de balancear a árvore
+                # OBS: Faremos essa verificação por toda árvore ao voltar pelo caminho percorrido pela
+                # recursividade
+                if self.__fatorBalanceamento(atual) >= 2:
+                    # Se o valor é menor, quer dizer que a árvore se desbalanceará para esquerda, assim devemos
+                    # fazer a rotaçãoLL
+                    if valor < atual.left.data:
                         atual = self.__RotacaoLL(atual)
+
+                    # Caso for maior, fazer rotaçãoLR, visto que o valor já é menor que o nó pai
                     else:
                         atual = self.__RotacaoLR(atual)
+
+            # A partir daqui, é a mesma lógica de cima, só que o novo nó indo para direita
             else:
                 atual.right = self.__insereValor(atual.right, valor)
-                if (self.__fatorBalanceamento(atual) >= 2):
-                    if (valor > atual.right.data):
+                if self.__fatorBalanceamento(atual) >= 2:
+                    if valor > atual.right.data:
                         atual = self.__RotacaoRR(atual)
                     else:
                         atual = self.__RotacaoRL(atual)
 
-            atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
+            # Aqui sempre iremos atualizar a altura do nó, já que utilizamos a altura pra sabermos o
+            # fator de balanceamento
+            atual.altura = self.__maior(self.__height(atual.left), self.__height(atual.right)) + 1
             return atual
 
+    """
+    Função vitrine, a fim de chamar a função __insere
+    """
+
     def insere(self, valor):
-        if (self.busca(valor)):
+        # Se o valor já existir, não é para adicionar
+        if self.busca(valor):
             return False  # valor já existe na árvore
+
+        # Caso contrário:
         else:
             self.__raiz = self.__insereValor(self.__raiz, valor)
             return True
 
     def busca(self, valor):
-        if (self.__raiz == None):
+        if self.__raiz is None:
             return False
 
+        # Nessa função iremos percorrer por toda árvore a fim de verificar se existe um valor nela
         atual = self.__raiz
-        while (atual != None):
-            if (valor == atual.data):
+        while atual is not None:
+            if valor == atual.data:
                 return True
 
-            if (valor > atual.data):
+            if valor > atual.data:
                 atual = atual.right
             else:
                 atual = atual.left
 
         return False
 
+    # Função que procura o menor nó da árvore (sempre andar para esquerda)
     def __procuraMenor(self, atual):
         no1 = atual
         no2 = atual.left
-        while (no2 != None):
+        while no2 is not None:
             no1 = no2
             no2 = no2.left
         return no1
 
+    # Função para remover valor
     def __removeValor(self, atual, valor):
-        if (atual.data == valor):  # achou o nó a ser removido
-            if (atual.left == None or atual.right == None):  # nó tem 1 filho ou nenhum
-                if (atual.left != None):
+        # Aqui acontecerá apenas quando encontramor o nó a ser removido
+        if atual.data == valor:  # achou o nó a ser removido
+            # Neste IF iremos encontrar o nó certo para dar valor
+            # Se o nó tiver apenas um filho
+            if atual.left is None or atual.right is None:
+                if atual.left is not None:
                     atual = atual.left
                 else:
                     atual = atual.right
 
-            else:  # nó tem 2 filhos
+            # Se o nó ter dois filhos:
+            else:
+                # Aqui vamos fazer a troca necessária para quando o nó a ser removido tiver 2 filhos
+
+                # Varíavel temporária com o menor filho da direita
                 temp = self.__procuraMenor(atual.right)
-                atual.data = temp.info
+                atual.data = temp.info  # Aqui trocamos o valor do nó pelo seu menor filho da direita
+                #  E então aqui fazemos a analise novamente de qual ítem deve ser removido
                 atual.right = self.__removeValor(atual.right, atual.data)
-                if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__height(atual.left.dir) <= self.__height(atual.left.esq)):
+
+                # Fazendo as rotações necessárias se desbalancear
+                if self.__fatorBalanceamento(atual) >= 2:
+                    if self.__height(atual.left.dir) <= self.__height(atual.left.esq):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
 
-            if (atual != None):
+            # Corrige altura
+            if atual is not None:
                 atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
 
         else:  # procura o nó a ser removido
-            if (valor < atual.data):
+            # Se o valor for menor, andar pela esquerda
+            if valor < atual.data:
                 atual.left = self.__removeValor(atual.left, valor)
-                if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__height(atual.right.left) <= self.__height(atual.right.right)):
+
+                # Fazendo as rotações necessárias se desbalancear
+                if self.__fatorBalanceamento(atual) >= 2:
+                    if self.__height(atual.right.left) <= self.__height(atual.right.right):
                         atual = self.__RotacaoRR(atual)
                     else:
                         atual = self.__RotacaoRL(atual)
+
+            # Se o valor for maior, andar pela direita
             else:
                 atual.right = self.__removeValor(atual.right, valor)
-                if (self.__fatorBalanceamento(atual) >= 2):
-                    if (self.__height(atual.left.dir) <= self.__height(atual.left.esq)):
+
+                # Fará o balanceamento assim como quando adicionamos um nó
+                if self.__fatorBalanceamento(atual) >= 2:
+                    if self.__height(atual.left.dir) <= self.__height(atual.left.esq):
                         atual = self.__RotacaoLL(atual)
                     else:
                         atual = self.__RotacaoLR(atual)
 
+            # Corrige altura
             atual.altura = self.__maior(self.__height(atual.esq), self.__height(atual.dir)) + 1
 
-        return atual
+        return atual  # Nesse caso, o atual será o nó raiz da árvore
 
     def remove(self, valor):
-        if (self.__raiz == None or not self.busca(valor)):
+        if self.__raiz is None or not self.busca(valor):
             return False  # árvore vazia ou valor não existe na árvore
         else:
             self.__raiz = self.__removeValor(self.__raiz, valor)
