@@ -60,7 +60,7 @@ Entre outros
 - Matriz de adjacência
     Utiliza uma matriz N x N para armazenar o grafo, onde N = nº de vértices
 
-- Listade adjacência
+- Lista de adjacência
     Uma aresta é representada por uma marca na posição (i, j) aresta liga o vértice i ao j
 
     Utiliza uma lista vértices para descrever as relações entre os vértices
@@ -147,6 +147,52 @@ Consiste em explorar o grafo de uma maneira bem específica
         - roteamento: encontrar o número minimo de hops(vértices intermediários no
          caminho correspondente à conexao) em uma rede
          - Encontrar o número mínimo de intermediários entre 2 pessoas
+
+
+## Busca em Profundidade
+
+- Funcionamento
+
+    Partindo de um vértice inicial, a busca explora o máximo possível cada um dos vizinhos
+    de um vértice antes de retroceder (backtracking)
+
+    Em outras palavras, inicia em um vértice e se aprofunda nos vértices vizinhos deste
+    até encontrar um dos dois casos:
+        - O alvo da busca
+        - Um vértice sem vizinhos que possam ser visitados
+
+    * Backtracking
+
+        Quando não houver mais vértices vizinhos, o backtracking retorna o caminho percorrido
+        com o objetivo de buscar um caminho alternativo
+
+    # Implementação
+
+        def __buscaProfundidade_Rec(self, ini, visitado, cont):
+            visitado[ini] = cont
+            grau = len(self.__arestas[ini])
+            for i in range(grau):
+                if visitado[gr.__arestas[ini][i]] == 0:
+                    self.__buscaProfundidade_Rec(gr.__arestas[ini][i], visitado, cont+1)
+
+        def BuscaProfundidade(self, ini):
+            cont = 1
+            visitado = [0 for i in range(self.__nro_vertices)]
+
+            self.__BuscaProfundiade_Rec(ini, visitado, cont)
+
+            return visitado
+
+    # Aplicações
+
+        - Encontrar componentes conectados e fortemente contecatados
+        - Ordenação topológica de um grafo
+        - Procurar a saída de um labirinto
+        - Verificar se um grafo é completamente conexo
+
+
+
+
 
 
 """
