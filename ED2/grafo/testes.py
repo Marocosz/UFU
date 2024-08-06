@@ -1,2 +1,3 @@
-lista = [1, 2, 3, 4]
-print(len(lista[1]))
+email = 'marcos@gmail.com'
+dominio = email.split('@')[1]
+print(dominio)
