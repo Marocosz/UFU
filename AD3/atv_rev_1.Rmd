@@ -1,0 +1,306 @@
+Exercícios de Revisão
+
+Exercício 1
+```{r}
+### x: Porcentagem de algodão
+### y: Resistência à tração em libras por polegada quadrada
+x = c(15, 15, 15, 15, 15, 20, 20, 20, 20, 20, 25, 25, 25, 25, 25, 30, 30, 30, 30, 30)
+y = c(7, 7, 15, 11, 9, 12, 17, 12, 18, 18, 14, 18, 18, 19, 19, 19, 25, 22, 19, 23)
+
+reg = lm(y ~ x)
+
+# A) # Teste de hipotese de Beta1
+
+# H0: Beta1 = 1
+# H1: Beta1 != 1
+
+summary(reg)$coef
+t0 = (0.752 - 1)/0.1108994
+df = df.residual(reg)
+
+2*pt(abs(t0), df, lower=FALSE)  # 0.03823482   
+# Valor-p < alpha, ou seja, rejeita-se H0
+
+
+# B)  # Teste de hipotese de Beta1
+
+# H0: Beta1 = -0.01
+# H1: Beta1 > -0.01
+
+
+t0 = (0.752 + 0.01)/0.1108994
+pt(t0, df, lower=FALSE)  # 9.952706e-07
+
+
+# C) # Teste de hipotese de Beta0
+
+# H0: Beta0 = 0.25
+# H1: Beta0 != 0.25
+
+t0 = (-0.820 - 0.25)/2.5710957
+2*pt(abs(t0), df, lower=FALSE)  # 0.6822092
+
+
+# D) # Teste de hipotese de Beta0
+
+# H0: Beta0 = -2
+# H1: Beta0 > -2
+
+t0 = (-0.820 + 2)/2.5710957 
+pt(t0, df, lower=FALSE)  # 0.3258824
+
+
+# E) # Intervalo de confiança unilateral superior 86,7% de Beta0
+
+confint(reg, level=0.734)  # <= 2.1316022
+
+
+# F) # Intervalo de confiança unilateral superior 87,1% de Beta1
+
+confint(reg, level=0.742)  # <= 0.8815432
+
+
+# G) # intervalo de confiança unilateral superior 87,5% para a resposta média quando x = 18% de algodão.
+
+predict(reg, data.frame(x = 18), level = 0.75, interval=c("confidence"))  # <= 13.66204
+
+
+# H) # Determine um intervalo de previsão unilateral superior 87,9% para uma nova observação no ponto x = 18% de algodão. 
+
+predict(reg, data.frame(x = 18), level = 0.758, interval=c("prediction")) # <= 16.20565
+
+```
+
+Exercício 02
+```{r}
+### x: Peso do automóvel em toneladas
+### y: Rendimento do automóvel em km/l
+x = c(1.18841, 1.30408, 1.05233, 1.45830, 1.56036, 1.56943, 1.61932, 1.44696, 1.42881, 1.56036, 1.56036, 1.84612, 1.69190, 1.71458, 2.38136, 2.46028, 2.42445, 0.99790, 0.73255, 0.83234, 1.11810, 1.59664, 1.55809, 1.74179, 1.74406, 0.87770, 0.97069, 0.68628, 1.43789, 1.25645, 1.61932, 1.26099)
+y = c(8.9280, 8.9280, 9.6933, 9.0981, 7.9502, 7.6951, 6.0796, 10.3735, 9.6933, 8.1628, 7.5676, 6.9724, 7.3550, 6.4622, 4.4215, 4.4215, 6.2496, 13.7747, 12.9244, 14.4124, 9.1406, 6.5897, 6.4622, 5.6544, 8.1628, 11.6064, 11.0537, 12.9244, 6.7173, 8.3753, 6.3772, 9.0981)
+
+reg = lm(y ~ x)
+
+# A)
+
+summary(reg)$coef
+
+df = df.residual(reg)
+t0 = (-5.009274 - 0.5)/0.5240361
+
+2*pt(abs(t0), df, lower=FALSE) # 1.408444e-11
+
+
+# B)
+
+t0 = (-5.009274 + 6)/0.5240361
+pt(t0, df, lower=FALSE)  # 0.034188
+
+
+# C)
+t0 = (15.851544 - 16)/0.7982624
+2*pt(abs(t0), df, lower=FALSE)  # 0.853717
+
+
+# D)
+t0 = (15.851544 + 1)/0.7982624
+pt(t0, df, lower=FALSE)  # 7.405552e-20
+
+
+# E)
+confint(reg, level=0.602)  #  >= 15.167082
+
+
+# F)
+confint(reg, level=0.61)  #  >= -5.466365
+
+
+# G)
+predict(reg, data.frame(x = 1), level=0.618, interval= c("confidence"))  #  >= 10.54755
+
+
+# H)
+predict(reg, data.frame(x = 1), level=0.626, interval= c("prediction"))  #  >= 9.635797
+```
+
+Exercício 03
+```{r}
+y <- c(8.9280, 9.6933, 9.0981, 7.9502, 7.6951, 6.0796, 10.3735, 9.6933, 8.1628, 7.5676, 6.9724, 7.3550, 6.4622, 4.4215, 4.4215, 6.2496, 13.7747, 12.9244, 14.4124, 9.1406, 6.5897, 6.4622, 5.6544, 8.1628, 11.6064, 11.0537, 12.9244, 6.7173, 8.3753, 6.3772, 9.0981)
+x1 <- c(110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180, 180, 180, 205, 215, 230, 66, 52, 65, 97, 150, 150, 245, 175, 66, 91, 113, 264, 175, 335, 109)
+x2 <- c(1304.08, 1052.33, 1458.30, 1560.36, 1569.43, 1619.32, 1446.96, 1428.81, 1560.36, 1560.36, 1846.12, 1691.90, 1714.58, 2381.36, 2460.28, 2424.45, 997.90, 732.55, 832.34, 1118.10, 1596.64, 1558.09, 1741.79, 1744.06, 877.70, 970.69, 686.28, 1437.89, 1256.45, 1619.32, 1260.99)
+x3 <- c(3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3.92, 3.92, 3.07, 3.07, 3.07, 2.93, 3.00, 3.23, 4.08, 4.93, 4.22, 3.70, 2.76, 3.15, 3.73, 3.08, 4.08, 4.43, 3.77, 4.22, 3.62, 3.54, 4.11)
+
+
+reg = lm(y ~ x1 + x2 + x3)
+
+# A) Com alpha = 0,01, teste a sua significância estatística por meio pela análise de variância. Utilize o método do valor-p
+
+summary(reg) 
+# Olhar o p-value no summary e comparar com o alpha proposto
+# valor-p menor < alpha, ou seja, rejeita-se H0, há evidências que pelo menos um dos betas é diferente de 0
+
+
+# B) Com alpha = 0,05 e utilizando o método do valor-p, teste a seguinte hipótese alternativa para o coeficiente beta individualmente: H1: beta1 != 0.
+
+summary(reg)$coef
+t0 =  -0.0138407/0.0037854
+df = df.residual(reg)
+
+2*pt(abs(t0), df, lower=FALSE)  # 0.001090368
+# valor-p < alpha, ou seja, rejeita-se H0, não há evidências que Beta1 seja 0  (Duvida nessa resposta)
+
+
+# C) Com alpha = 0,05 e utilizando o método do valor-p, teste a seguinte hipótese alternativa para o coeficiente beta individualmente: H1: beta2 < 0
+
+t0 = -0.003047269/0.0007446
+
+pt(t0, df)  # 0.0001731821
+# valor-p < alpha, ou seja, rejeita-se H0
+
+
+# D) Determinar um intervalo de confiança unilateral superior 90% para o coeficiente Beta1 utilizando o Método do Intervalo De Confiança Individual
+
+confint(reg, level=0.8)  # beta1 <= -0.008867839
+
+# Confint para determinar o intervalo de confiança bilateral, porém no level subtraimos a diferença 
+# dele de 100 com ele mesmo, e então pegamos o superior ou o inferior de determinado Beta
+
+
+# E) Considere um modelo de regressão reduzido apenas com a variável x1. Verifique se este modelo reduzido é satisfatório com alpha = 0,04. Utilize o método do valor-p.
+
+# H0: Beta2 = beta3 = 0
+# H1: Betai != 0
+
+sat = reg
+red = lm(y ~ x1)
+anova(red, sat)
+
+# valor-p = 3.667e-06 e F 20.617
+
+# Conclusão: Rejeita-se H0, ou seja, há evidências que o modelo reduzido seja pior
+# modelo reduzido não deve ser adotado
+
+
+# F) Teste se os resíduos padronizados da regressão nã seguem uma distribuição normal. Utilizar o teste de normalidade de Shapiro-wilks e alpha = 0.05
+
+# H0: ri é normal
+# H1: ri não é normal
+
+# alpha = 0,05
+
+shapiro.test(rstandard(reg))  # W = 0.91113, p-value = 0.01383
+
+# Conclusão: Rejeita-se em rejeitar H0, ou seja, há evidências que os resíduos padronizados não sejam normais.
+
+
+# G) Utilizando as funções básicas do R, determine os Fatores de Inflação de Variância dos coeficientes beta. Quais as conclusões?
+
+x  = cbind(x1, x2, x3)
+diag(solve(cor(x)))
+
+#   FIV      FIV     FIV
+#       x1       x2       x3 
+# 1.754445 2.835913 2.014633
+
+# Nao há problemas de multicolinearidades visto que nenhum é maior que 4
+
+
+# H) Com alpha = 0,05, verifique se algum dos resíduos de Student é candidato a outlier. Utilize o  método da região crítica com a correção de Bonferroni. A resolução deve indicar pelo menos a região de rejeição/aceitação, o menor e o maior resíduo de Student. 
+
+length(rstudent(reg))  # 31
+gl = 26  # n - k - 2 = 31 - 3 - 2
+
+# 62 porq: 31 * 2 (Bonferroni)
+# Região de Aceitação
+qt(alpha/62, gl, lower=FALSE)  # 3.519811
+qt(alpha/62, gl)  # -3.519811
+
+sort(rstudent(reg))
+maior_rti = 2.50353152
+menor_rti = -1.40912413
+
+```
+
+
+Exercício 4
+```{r}
+y <- c(7.31, 8.60, 7.85, 8.63, 4.82, 9.51, 9.23, 14.92, 13.07, 7.10, 15.70, 9.25, 8.47, 8.73, 7.65, 6.19, 6.40, 7.65, 7.06, 10.12, 9.23, 7.13, 13.72, 12.64, 5.71, 10.28, 8.48, 5.98, 5.71, 5.92, 7.10)
+
+x1 <- c(170, 105, 143, 95, 215, 110, 110, 70, 75, 155, 80, 109, 110, 83, 129, 190, 215, 155, 145, 110, 180, 185, 75, 86, 223, 96, 140, 148, 148, 195, 165)
+
+x2 <- c(1297.3, 1592.1, 1764.5, 1526.3, 1911.9, 1369.8, 1442.4, 864.1, 1052.3, 1762.2, 911.3, 1204.3, 1530.9, 1224.7, 1764.5, 2399.5, 2351.9, 1773.5, 1660.1, 1383.5, 1927.8, 1746.3, 1031.9, 975.2, 2463.0, 1149.9, 1982.2, 2059.3, 2138.7, 1911.9, 1660.1)
+
+reg = lm(y ~ x1 + x2)
+
+# A)
+
+summary(reg)  # p-value: 7.876e-09 < alpha, ou seja, rejeita-se H0, há evidências que pelo menos um dos betas é diferente de 0
+
+
+# B)
+
+summary(reg)$coef
+t0 = -0.020709955/0.01125006
+df = df.residual(reg)
+pt(t0, df)  # 0.03812992 < alpha, rejeita-se H0
+
+
+# C)
+
+t0 = -0.003447268/0.00116311
+pt(t0, df)  # 0.003070955  < alpha, rejeita-se H0
+
+
+# D)
+
+confint(reg, level=0.988)  # <= 0.0095159964
+
+
+# E)
+
+sat = reg
+red = lm(y ~ x2)
+anova(red, sat)  # F: 3.3888  valor-p: 0.07626 > alpha, falha-se em rejeitar H0, ou seja, não há evidências que
+# o modeloreduzido é significativamente melhor
+
+
+# F)
+
+shapiro.test(rstandard(reg))  # W = 0.92818, p-value = 0.03913  < alpha, Rejeita-se em rejeitar H0, ou seja, há evidências que os resíduos padronizados não sejam normais.
+
+
+# G)
+
+x = cbind(x1, x2)
+diag(solve(cor(x)))
+#    x1      x2 
+# 3.64131 3.64131
+
+# Nao há problemas de multicolinearidades visto que nenhum é maior que 4
+
+
+# H)
+
+alpha = 0.05
+length(rstandard(reg))  # 31
+GL = 31 - 2 - 2 # n - k - 2
+
+qt(alpha/62, GL)  # -3.504931
+qt(alpha/62, GL, lower=FALSE)  # 3.504931
+
+sort(rstandard(reg))
+menor_rti = -1.70630175
+maior_rti = 2.48640335
+
+
+```
+
+
+
+
+
+
+
+
+
+
+

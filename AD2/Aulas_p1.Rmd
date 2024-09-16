@@ -14,7 +14,7 @@ qexp ----> quantil (distribuição acumulada inversa)
 para dexp e pexp: (X, 1/Lambda(media))
 para qexp: (probabilidade, Lambda)
 
-# Funções
+# Funções 
 
 pexp e qexp: lower.tail --> Se "TRUE" (Padrão): P(X <= x) Se "FALSE": P(X > x) complementar
 
