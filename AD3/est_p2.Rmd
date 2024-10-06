@@ -1,0 +1,603 @@
+## Analise de série temporais
+
+  Uma série temporal é qualquer conjunto de observações ordenadas no tempo
+
+  Série continua: Quando as observações são feitas continuamente ao longo do tempo
+  Série discreta: Quando as observações são tomadas em pontos específicos no tempo
+  
+
+# Modelo clássico
+
+Aqui considera que as séries temporais são composta de quatro padrões
+  
+  - Tendência (Movimento suave, a longo prazo, dos dados, para baixou o para cima)
+  - Variações cíclicas
+  - Variações sazonais
+  - Variações irregulares
+  
+  
+# Sazonalidade
+
+  É um padrão que se repete com uma periodicidade (Anual, semestral, trimestral) conhecida e fixa
+  
+  
+# Ciclo
+  
+  É um padrão que se repete com alguma regularidade, mas com uma periocidiade não fixa,
+  normalmente longa e as vezes até desconhecida
+  
+
+# Variações irregulares
+  
+  Na maioria das vezes, supõe-se que o componente irregular é uma sequência de variáveis
+  aleatórias independentes igualmente distribuidas (ruido branco)
+
+
+# Modelo Aditivo
+  
+  Y = T + S + I
+  
+  Todos componentes são quantidades efetivas
+  
+
+# Modelo MUltiplicativo
+
+  Y = T * S * I
+  
+  Aqui a tendência é uma quantidade e os outros componentes são expressos em porcentagens da tendência
+  
+
+# Estudo da tendência
+
+  Há duas finalidades básicas ao isolar as tendências
+    - Identificar a tendência de modo a permitir levá-la em conta ao planejar decisoes (ex: previsões)
+    - Remover a tendência de modo a permitir a análise dos outros componentes da série
+    
+  Considere, inicialmente, um modelo aditivo sem o componente sazonal
+    Yt = Tt + at 
+    (at = ruído branco)
+    
+  Há duas maneiras de se estimar a tendência desta serie temporal:
+    - Análise de regressão
+    - Médias moveis
+    
+    
+# Análise de regressão
+
+  Os modelos de gressão vistos anteriormente podem ser aplicados a séries temporais
+  substituindo-se a variável independente pelo tempo (t = 1, 2, ...) e usando os
+  valores correspondentes da série temporal como variável dependente
+  
+
+# Tendência linear
+
+  T^t = Beta^0 + Beta^1 * t
+  
+  É dada pelo método dos mpinimos quadrados
+  
+  
+  
+  
+# Exercício 1 ==================================================================
+
+```{r}
+Y = ts(c (84.6, 89.9, 81.9, 95.4, 91.2, 89.8, 89.7, 97.9, 103.4, 107.6, 120.4, 109.6, 110.3, 118.1, 116.5, 134.2, 134.7, 144.8, 144.4, 
+159.2, 168.2, 175.2, 174.5, 173.7), frequency = 1)
+
+tp = c(1:length(Y))  # Tempo
+
+reg = lm (Y ~ tp)
+
+plot(tp, Y, type= "b", ylim = c(60,180))
+
+abline(reg, col = "red", lty = 2)
+```
+
+  
+  
+# Médias moveis
+  
+  Calcula-se a média dos primeiros k períodos da série, colocando o resultado no período
+  exatamente no centro deles. Progressivamente vamos acrescentando um período seguinte e desprezando 
+  o primeiro da média imediantemente anterior, e calculando novas médias, que vão se "movendo"
+  até o fim da série. O número de períodos k é chamado de ordem da série
+  
+
+# Exercício 2 ==================================================================
+
+```{r}
+
+Y = ts(c (84.6, 89.9, 81.9, 95.4, 91.2, 89.8, 89.7, 97.9, 103.4, 107.6, 120.4, 109.6, 110.3, 118.1, 116.5, 134.2, 134.7, 144.8, 144.4, 
+159.2, 168.2, 175.2, 174.5, 173.7), frequency = 1)
+
+
+MM = filter(Y, c(1/3, 1/3, 1/3), sides = 2)
+plot(Y, type = "b")
+lines(MM, col = "red", lty = 2)
+
+# Sendo: Yt = linha preta
+#        T^t = Linha vermelha
+```
+
+  
+# Exercício 3 ==================================================================
+
+```{r}
+Y = ts(c (84.6, 89.9, 81.9, 95.4, 91.2, 89.8, 89.7, 97.9, 103.4, 107.6, 120.4, 109.6, 110.3, 118.1, 116.5, 134.2, 134.7, 144.8, 144.4, 
+159.2, 168.2, 175.2, 174.5, 173.7), frequency = 1)
+
+MM = filter(Y, c(1/8, rep(1/4, 3), 1/8), sides = 2)
+plot(Y, type = "b")
+lines(MM, col = "red", lty = 2)
+```
+
+Quanto maior o número de períodos da série agrupados pela média móvel, mais "suave"
+fica a linha de tendência: esta representa melhor o comportamento de longo prazo, 
+indicando uma ligeira oscilação em torno do nível da série
+
+Por este motivo, quando uma série apresenta muitas irregularidades é comum filtrá-la
+através de médias móveis
+
+
+# Estudo da sazonalidade
+
+  Finalidades básicas
+    - Identificar os fatores sazonais de modo a permitir levá-los em conta ao planejar decisões
+    - Remover a sazonalidade
+    
+  Inicialmente considerando um modelo aditivo com tendência linear e componente sazonal
+    Yt = Tt + St + at
+    Onde at é ruido branco
+  
+  Há algumas maneiras de se decompor esta série temporal
+  
+  # Método das médias moveis
+    
+    1 passo: Estimar a tendência por meio de uma média movel de k termos centrada
+    2 passo: construir a série livre de tendência Zt
+      Zt = Yt - T^t
+    3 passo: Agrupar a série Zt de acordo com o exemplo a seguir, executando os cálculos indicados
+    4 passo: As constantes sazonais são obtidas
+      S^j = Z-j - Z-
+  
+  assim a série sem sazonalidade é:
+  
+    - YtSA = Yt - S^t
+    
+  e a série residual:
+    
+    a^t = Zt - S^t = Yt - T^t - S^t
+    
+
+# Exercício 04 =================================================================
+
+```{r}
+Y = ts(c(20, 18, 22, 24, 24, 22, 26, 29, 28, 25, 31, 34, 32, 29, 35, 38, 36, 32, 40, 43, 40, 36, 44, 48), start = 2007, frequency = 4)
+
+plot(Y, type = "o", lwd = 2, pch = 16)
+
+# Modelo aditivio:
+mod = decompose(Y, type = c("additive"))
+mod
+plot(mod)
+
+# Modelo multiplicativo
+mod = decompose(Y, type = c("multiplicative"))
+mod
+plot(mod)
+```
+
+  
+# Componentes
+
+  Tendência: mod$trend
+  
+  Constantes sazonais: mod$figure
+  
+  Série residual: mod$random
+  
+  Série sem sazonalidade: Y-mod$figure  # Modelo aditivo
+                          Y/mod$figure  # Modelo multiplicativo
+  
+  
+
+## Modelo clássico - Tópicos adicionais
+
+  Estudaremos como estimar a tendência e a sazonalidade por meio de modelos de regressão linearizáveis.
+  
+  # Tendência:
+    
+    Regressão Polinomial
+    
+  # Sazonliade
+  
+    Regressão hamônica
+    Regressão com variáveis indicadoras
+    
+
+# Exercício 05 =================================================================
+
+modelo tipo:  Y^t = Beta^0 + Beta^1 * lnt
+
+```{r}
+y = c(9.6, 11.6, 13.8, 13.9, 12.8, 15.7, 15.9, 16.3, 16.2, 17.7)
+
+tempo = c(1:10)
+
+reg = lm(y ~ log(tempo))
+
+coef(reg)
+
+plot(tempo, y, pch = 19)
+lines(fitted(reg), col = "red")
+
+# Assim:
+# Y^t = 9,465 + 3,234 * lnt  
+# 9,465 = intercept
+# 3,234 = log(tempo)
+```
+
+  
+# Exercício 06 =================================================================
+
+```{r}
+y = c(3929214, 5308483, 7239881, 9638453, 12860702, 17063353, 23191876, 31443321, 38558371, 50189209, 62979766, 76212168, 92228496, 106021537, 123202624, 132164569, 151325798, 179323175, 203302031, 226542203, 248709873)
+
+### ajuste do modelo
+tempo = 1:length(y)
+
+reg = lm(y ~ tempo + I(tempo^2))  # Regressão
+
+coef(reg)
+
+plot(tempo , y, pch = 19, col = "red")
+lines(fitted(reg)) 
+
+### previsão
+previsao = predict(reg, data.frame(tempo = 22:26))
+
+plot(tempo , y, pch = 19, col = "red", xlim = c(0,26), ylim = c(min(y), max(previsao)))
+lines(fitted(reg))
+points(22:26, previsao, pch = 19, col = "blue")
+lines(22:26, previsao, col = "blue", lty = 2)
+
+# Ficando assim:
+# T^t = 6957920 - 2159870 * t + 650634 * t²
+# Sendo os valores intercept, tempo e tempo^2
+```
+
+
+# Regressão Harmônica
+
+  Muitas séries temporais são influenciadas por fatores sazonais (ex o clima), cujo
+  efeito pode ser modelado por componentes periódicos com período fixo e conhecido 
+  
+  d: período da sazonalidade
+  
+  se d for par:
+    n1 = d/2
+    n2 = d/2 - 1 (se sen(pi * t) = 0)
+    
+  se d for impar:
+    n1 = n2 = |d/2| onde | | denota a parte inteira do número (função piso)
+    
+
+# Exercício 07 =================================================================
+
+```{r}
+z = c(9007, 8106, 8928, 9137, 10017, 10826, 11317, 10744, 9713, 9938, 9161, 8927, 7750, 6981, 8038, 8422, 8714, 9512, 10120, 9823, 8743, 9129, 8710, 8680, 8162, 7306, 8124, 7870, 9387, 9556, 10093, 9620, 8285, 8433, 8160, 8034, 7717, 7461, 7776, 7925, 8634, 8945, 10078, 9179, 8037, 8488, 7874, 8647, 7792, 6957, 7726, 8106, 8890, 9299, 10625, 9302, 8314, 8850, 8265, 8796, 7836, 6892, 7791, 8129, 9115, 9434, 10484, 9827, 9110, 9070, 8633, 9240)
+
+### ajuste do modelo
+tp = 1:length(z)
+tp
+
+reg = lm(z ~ tp + cos(2*pi*tp/12) + cos(4*pi*tp/12) + cos(6*pi*tp/12) + cos(8*pi*tp/12) + cos(10*pi*tp/12) + cos(12*pi*tp/12) + sin(2*pi*tp/12) + sin(4*pi*tp/12) + sin(6*pi*tp/12) + sin(8*pi*tp/12) + sin(10*pi*tp/12))
+
+coef(reg)
+
+plot(tp, z, pch = 19)
+lines(fitted(reg), col = "red")
+
+### previsão
+previsao = predict(reg, data.frame(tp = 73:96))
+
+plot(tp , z, pch = 19, col = "red", xlim = c(0, 96), ylim = c(min(previsao), max(z)))
+lines(fitted(reg))
+points(73:96, previsao, pch = 19, col = "blue")
+lines(73:96, previsao, col = "blue", lty = 2)
+
+```
+
+# Exercício 08 =================================================================
+
+```{r}
+y = c(288856, 292435, 301112, 294227, 295512, 307358, 305742, 304435, 290781, 303794, 311976, 317456, 296583, 310928, 317853, 315864, 318834, 331513, 338989, 32725, 327831, 339666, 353127, 343064, 337138, 346857, 349115, 348077, 346444, 357960, 361277, 374078, 372915, 384648, 382530, 380976, 355143, 374322, 378129, 372923, 370386, 377619, 388869, 379334, 382171, 396306, 400805, 381781, 387153, 399267, 398367, 393487, 412589, 416540, 418379, 415205, 402829, 429211, 441890, 440659, 448294, 453256, 454255, 437860, 440951, 457278, 466091, 465451, 467346, 478017, 488983, 488001, 484402, 499723, 517178, 517049, 516533, 522181, 540337, 533328, 527194, 537800, 544884, 556028, 559997, 568218, 576647, 576680, 580265, 580999, 598309, 601399, 603727, 610592, 622001, 621557, 620103, 633902, 650814, 661901, 673166, 673352, 682833, 666125, 670500, 680807, 692740, 696273)
+
+### ajuste do modelo
+tp = 1:length(y)
+tp
+
+reg = lm(y ~ tp + I(tp^2) + cos(2*pi*tp/4) + cos(4*pi*tp/4) + sin(2*pi*tp/4))
+
+coef(reg)
+
+plot(tp, y, pch = 19)
+lines(fitted(reg), col = "red")
+
+### previsão
+previsao = predict(reg, data.frame(tp = 109:120))
+
+plot(tp , y, pch = 19, col = "red", xlim = c(0,120), ylim = c(min(y), max(previsao)))
+lines(fitted(reg))
+points(109:120, previsao, pch = 19, col = "blue")
+lines(109:120, previsao, col = "blue", lty = 2)
+```
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+# Exercício 09 =================================================================
+
+```{r}
+y = ts(c(0.8638625, 0.9132749, 0.9707384, 1.0238919, 0.9920862, 1.0625939, 1.0803405, 1.1273655, 1.1133829, 1.1568772, 1.2022584, 1.2400275, 1.2287048, 1.3126748, 1.3394971, 1.3865180, 1.3611805, 1.3948969, 1.4336090, 1.4748757, 1.4327626, 1.4514831, 1.4736331, 1.5084685, 1.4638448, 1.5352103, 1.5456049, 1.5918321, 1.5497863, 1.6036824, 1.6072394, 1.6716465, 1.6209117, 1.6657521, 1.6835262, 1.7535290), start = 2010, frequency = 4)
+
+### ajuste do modelo
+tp = 1:length(y)
+
+A <- contr.sum(4)						# d = 4 trimestres
+D <- rbind (A, A, A, A, A, A, A, A, A)				# n = 9 anos
+D <- data.frame(D)
+
+reg <- lm(y ~ tp + X1 + X2 + X3, data = D)
+
+coef(reg)
+
+-sum(coef(reg)[3:5])	# constante sazonal do 4º trimestre
+
+plot(tp, y, pch = 19)
+lines(fitted(reg), col = "red")
+
+### previsão
+previsao = predict(reg, data.frame(tp = 37:40, X1 = c(1, 0, 0, -1), X2 = c(0, 1, 0, -1), X3 = c(0, 0, 1, -1)))
+
+plot(tp , y, pch = 19, col = "red", xlim = c(0,40), ylim = c(min(y), max(previsao)))
+lines(fitted(reg))
+points(37:40, previsao, pch = 19, col = "blue")
+lines(37:40, previsao, col = "blue", lty = 2)
+```
+
+# Exercício 10 =================================================================
+
+```{r}
+y = ts(c(361, 252, 316, 70, 0, 4, 13, 8, 110, 75, 130, 211, 269, 94, 174, 22, 68, 2, 1, 76, 18, 65, 228, 446, 256, 331, 115, 6, 36, 0, 1, 0, 39, 50, 183, 414, 712, 137, 315, 160, 55, 0, 0, 7, 35, 63, 257, 198, 254, 238, 73, 124, 15, 17, 20, 0, 2, 102, 138, 454, 487, 43, 183, 109, 93, 42, 0, 7, 58, 70, 201, 273, 218, 230, 369, 217, 31, 0, 0, 21, 77, 288, 307, 525, 503, 222, 137, 59, 18, 28, 31, 0, 13, 130, 197, 287, 193, 272, 295, 226, 64, 0, 0, 0, 40, 206, 86, 367, 481, 325, 182, 85, 61, 36, 12, 54, 156, 184, 149, 351, 183, 251, 87, 34, 25, 12, 2, 0, 11, 125, 318, 239, 320, 295, 391, 199, 5, 28, 0, 0, 2, 136, 75, 233, 271, 199, 162, 148, 61, 46, 14, 0, 32, 129, 201, 87, 362, 162, 110, 91, 161, 5, 0, 0, 12, 95, 47, 355, 62, 54, 119, 113, 8, 0, 66, 0, 19, 50, 314, 235), start = 2000, frequency = 12)
+
+### ajuste do modelo
+tp = 1:length(y)
+
+A <- contr.sum(12)									# d = 12 meses
+D <- rbind (A, A, A, A, A, A, A, A, A, A, A, A, A, A, A)				# n = 15 anos
+D <- data.frame(D)
+
+reg <- lm(y ~ X1 + X2 + X3 + X4 + X5 + X6 + X7 + X8 + X9 + X10 + X11, data = D)
+
+coef(reg)
+
+-sum(coef(reg)[2:12])								 	# constante sazonal do mês de dezembro
+plot(tp, y, pch = 19)
+lines(fitted(reg), col = "red")
+```
+
+  
+# Exercício 11 =================================================================
+
+```{r}
+y = ts(c(
+0.8582009897, 0.9151117859, 0.9676447967, 1.0295395572, 0.9915433962, 1.0615864304, 1.0833527754, 1.1318924141, 1.1031950701, 1.1575587784, 1.2007106467, 1.2380591126, 1.2240818646, 1.3094400289, 1.3342657017, 1.3969453047, 1.3584915549, 1.4015242304, 1.4356093066, 1.4812769139, 1.4336925516, 1.4546382996, 1.4792259925, 1.5238041469, 1.4631862101, 1.5355887748, 1.5450705601, 1.6016560064, 1.5518964014, 1.6051857210, 1.6186786262, 1.6938598767, 1.6298064955, 1.6959465650, 1.7185921326, 1.7638551058, 1.7152953597, 1.7971916429, 1.8294017606, 1.8703098873, 1.7827110752, 1.6837400001, 1.8670703318, 1.9834242465), start = 2010, frequency = 4)
+
+
+treino = window(y, start = c(2010, 1), end = c(2018, 4))
+teste = window(y, start = c(2019, 1), end = c(2020, 4))
+
+
+tp = 1:length(treino)
+
+mod1 = lm(treino ~ tp + cos(2*pi*tp/4) + cos(4*pi*tp/4) + sin(2*pi*tp/4))
+
+prev1 = predict(mod1, data.frame(tp = 37:44))
+
+e1 = teste-prev1
+
+mod2 = lm(treino ~ tp + I(tp^2) + cos(2*pi*tp/4) + cos(4*pi*tp/4) + sin(2*pi*tp/4))
+
+prev2 = predict(mod2, data.frame(tp = 37:44))
+
+e2 = teste-prev2
+
+mean(abs(e1)); mean(abs(e2))		### MAE
+
+sqrt(mean(e1^2)); sqrt(mean(e2^2))	### RMSE
+
+## Gráfico comparativo
+plot(tp , treino, pch = 19, ylab = "Yt", xlab = "tempo", xlim = c(0, 44), ylim = c(min(y), max(prev1, prev2)))
+abline(v = 36.5, lty = 2)
+points(37:44, teste, pch = 15, col = "red")
+lines(tp, fitted(mod1), col = "green")
+lines(tp, fitted(mod2), col = "blue")
+lines(37:44, prev1, col = "green", lty = 2)
+lines(37:44, prev2, col = "blue", lty = 2)
+```
+
+
+# Exercício 12 =================================================================
+
+SES = Suavização Exponencial Simples
+
+```{r}
+y = ts(c(27,34,31,24,18),frequency = 1)
+
+mod = HoltWinters(y, alpha = 0.2, beta = FALSE, gamma = FALSE)
+
+fitted(mod)
+coef(mod)
+predict(mod)
+residuals(mod)
+mod$SSE
+```
+
+# Exercício 13 =================================================================
+
+SEH = Suavisação Exponencial de Holt
+
+```{r}
+## Não sei se ta certo
+
+y  = ts(c (0.50, 2.65, 0.97, 4.12, -0.59, 2.06, 2.17, 0.00, 1.03, 1.40, 2.39, -0.12, 0.96, 1.91, 2.11, -1.07, 
+3.78, 1.35, 2.05, -0.10, 2.04, 2.10, 2.34, 0.43, 0.42, 1.86, 0.25, 1.04, 1.59, 1.25, 1.55, 2.83, 0.99, 1.75, 1.72, 2.14, 2.76, 2.62, 2.95, 2.85, 1.90, 1.51, 1.59, 1.70, 2.90, 1.72, 1.64, 1.70, 2.45, 1.90, 3.95, 2.47, 3.14, 3.90, 2.84, 2.39, 2.51, 1.84, 3.42, 2.32, 2.59, 
+3.24, 3.38, 2.40, 0.16, 0.47, 1.55, 4.10, 2.31, 1.33, 1.57, 1.23, 0.36, 0.36, 0.24, 1.15, 2.38, 1.77, 1.96, 0.60, 1.20, 0.79, 0.69, 1.64,2.70, 0.96, 1.65, 0.08, 1.16, 1.23, 0.57, 0.68, 0.98, 1.42, 1.62, 2.30, 2.05, 2.85, 2.83, -0.17, 1.05, 2.35, 1.12, 0.15, 2.39, 2.05, 1.45, 0.55, 3.39, 1.52, 1.98, 3.58, 2.56, 4.08, 2.40, 1.00, 2.62, 2.74, 2.96, 2.62, 3.02, 2.76, 2.16, 1.55, 2.93, 3.10, 2.35), frequency = 1)
+
+mod = HoltWinters(y, alpha = 0.2, beta = 0.3, gamma = FALSE)
+mod
+
+fitted(mod)
+coef(mod)
+predict(mod)
+residuals(mod)
+mod$SSE
+
+```
+# Exercício 14 =================================================================
+
+SEHW = Suavização Exponencial de HoltWinters
+
+```{r}
+ y = ts(c(71.6, 72.5, 73.5, 74.5, 75.2, 76.3, 
+76.9, 78.1, 80.0, 80.9, 81.7, 82.9, 84.7, 
+86.3, 88.8, 90.9, 91.5, 93.4, 94.6, 95.9, 
+96.7, 97.8, 99.1, 100.0), frequency = 1)
+
+
+```
+
+Exercício 16
+
+a) Predict
+
+b) fitted(mod)
+
+
+```{r}
+# Exercício 17
+
+y = ts(c(3676, 3397, 3375.5, 4135.5, 4003.6, 3539.4, 
+3378.9, 4088.1, 4034.8, 3866.3, 4310.4, 3950.4, 4110.5, 
+3776.5, 3901.8, 4675.1, 4437, 4097.8, 3822.5, 4553.3, 
+4558.3, 4262, 4865.9, 4576.2, 4554, 4223.8, 4394.5, 
+5080, 5005.7, 4571.9, 4312.8, 5144.3, 5028.2, 4763, 
+5436.4, 5019.1), start = 2018, frequency = 12)
+
+mod = HoltWinters(x=y)
+mod
+
+fitted(mod)
+predict(mod)
+coef(mod)
+
+# A)
+# Y^fev19 = 3652,670  (Fitted)
+
+# B)
+# Y^jan21 = 5171,548  (Predict)
+
+# C)
+# lfev19 = 4047,667 (Usamos o LEVEL do mês posterior) (Fitted) 
+
+# D)
+# ldez20 = 5080,9885  (Quando acabar os dados fitted, usamos o coef)
+
+# E)
+# bfev19 = 44,35875  ( Usamos a TREND do mês posterior) (Fitted)
+
+# F)
+# bdez20 = 45,40035 (Usamos o B do Coef já que não existe nos dados fitted)
+
+# G)
+# Sjan19 = 58,23245  (Como é sazonalidade, usamos o dado Season do Fitted do outro ano no caso 20)
+
+# H)
+# Sdez20 = -69,94598  (Como não existe os dados em fitted, usamos o coef s12)
+```
+
+
+```{r}
+# Exercício 18
+
+ y = ts(c(4141.5, 6586.8, 3399.6, 3963.2, 6294.6, 3261, 
+3871.3, 6241, 3358.5, 3959.8, 6414.8, 3231.4, 3632.4, 
+5593.6, 2863.3, 3240.8, 5079.8, 2687.7), start = 2000, 
+frequency = 6)
+
+mod = HoltWinters(y, seasonal = c("multiplicative"))
+mod
+
+fitted(mod)
+predict(mod)
+coef(mod)
+
+# A)
+# Y^3B-02 = 2865,712  (Período dentro dos dados, usar Fitted, xhat por ser previsão)
+
+# B)
+# Y^1B-03 = 3214,293  (Período fora dos dados, usar predict)
+
+# C)
+# l3B-02 = 3827,729  (Usar fitted)
+
+# D)
+# S3b-02 = 0,7480415  (Usar coef (s3))
+
+```
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  

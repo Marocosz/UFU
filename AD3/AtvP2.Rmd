@@ -1,0 +1,87 @@
+# Questão 01 ===================================================================
+
+```{r}
+x = ts(c(3509.1, 3926.6, 6304.6, 3367.2, 3827.5, 6182.3, 3256.9, 3706.3, 5999.5, 3178.8, 3501.9, 5759.3, 3029.4, 3400.5, 5613.2, 2871.8, 3246.3, 5367.1, 2775.9, 3130.6, 5192.3, 2688.1, 2991.5, 4985.5, 2541.8, 2897.8, 4771, 2439.7, 2767.9, 4561.7, 2360.1, 2686.3, 4385.4, 2256, 2533.7, 4163.2, 2161.4, 2393.7, 3948.6, 2081.2, 2303.6, 3753.2, 1987.4, 2147.8, 3580.3, 1798.2, 2067.1, 3348.9, 1731, 2009, 3232.8, 1631.7, 1857.9, 3006.5, 1519.6, 1713.8, 2764.5, 1379.8, 1604.8, 2575.7), start = 1, frequency = 3)
+
+# Média Móvel centrada de 16 termos
+MM = filter(x, c(1/32, rep(1/16, 15), 1/32), sides = 2)
+MM[29]
+
+
+# Modelo Multiplicativo (estime para o 17º períod)
+mod = decompose(x, type = c("multiplicative"))
+mod
+
+
+# Dessazonalidade (Dividir a série pelos componentes sazonais) (Previsão da série para o 63º período)
+comp_season = mod$seasonal
+serie_deseason = x/comp_season  # Dessazonalidade
+
+t = 1:length(serie_deseason)  # 60
+
+mod = lm(serie_deseason ~ t)  # Modelo da dessazonalidade
+mod
+
+prev = predict(mod, newdata = data.frame(t = 63))  # Previsão
+
+periodo_season = (63 - 1) %% frequency(x) + 1  # Ajustando para ciclos sazonais
+
+season_63 = comp_season[periodo_season] 
+
+prev_final = prev * season_63  # Previsão final
+prev_final
+
+```
+
+# Questão 02 ===================================================================
+
+```{r}
+x = ts(c(1081.6, 247.5, 746.2, 812.8, 864.7, 46.3, 516.4, 586.2, 658.4, -139.3, 340.2, 433.8, 535.3, -259.4, 211.1, 281.1, 315.8, -471.2, 32.4, 94.3, 176.4, -631, -185.8, -128.3, -53.8, -890.2, -422.7, -384.3, -324.7, -1148.5, -664.9, -597.7, -528.8, -1310.5, -762.2, -689.6, -661.3, -1489.2, -1020.2, -932.5, -824.7, -1611.6, -1139.7, -1000.2, -932, -1732.1, -1243.4, -1135.7, -1027.1, -1850.1, -1415.4, -1370.2), start = 2008, frequency = 4)
+
+mod = HoltWinters(x)  # Modelo HoltWinters Aditivo
+
+## Estimativa do nível da série para o 2º trimestre de 2010
+fitted(mod)
+# Para estimar o nível da série, pegaremos o "Level" do mês posterior pedido
+
+
+## Estimativa da sazonalidade da série para o 1º trimestre de 2011
+# Pegaremos aqui o dado "season" do outro ano, no caso 1º trimestre de 2012
+
+
+## Estimativa da tendência da série para o 4º trimestre de 2020
+# Usariamos o dado "trend" do próximo período, mas como não existe, usaremos o dado "b" do coef
+coef(mod)
+
+
+## Previsão 1 passo adiante para o 2º trimestre de 2013.
+# Aqui vamos usar o dado "xhat" do próprio período
+```
+
+# Questão 3 ====================================================================
+
+```{r}
+y = ts(c(3530.1, 3971.8, 4541.1, 3893.9, 4268, 4876.9, 4170.4, 4475.8, 5058.6, 4349.5, 4621.4, 5205.4, 4434.9, 4688.4, 5354.5, 4665.4, 5012.7, 5495.6, 4778.8, 5117.7, 5534.2, 4827.3, 5102.5, 5613.1, 4842.9, 5174.7, 5691.7, 4957.2, 5221.9, 5747.6, 5031.3, 5287, 5817.8, 5092.7, 5436.1, 5922.1, 5230.3, 5542.4, 6096.7, 5436.8, 5727.3, 6211.6, 5466, 5794.6, 6298.6, 5647.2, 6004.8, 6491.2, 5785.2, 6123, 6623.2, 5900.9, 6317, 6693.3, 6081.3, 6426.6, 6770.3, 6116.7, 6538.5, 6836.2), start = 1, frequency = 3)
+
+# Modelo com Tendência Linear e Sazonalidade Harmônica
+t = 1:length(y)
+reg = lm(y ~ t + cos(2*pi*t/3) + sin(2*pi*t/3))
+
+coef(reg)
+
+# Previsão da série para o 63º periodo
+previsao = predict(reg, data.frame(t = 63))
+previsao
+```
+
+
+
+
+
+
+
+
+
+
+
+
