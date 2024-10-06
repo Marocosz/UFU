@@ -8,7 +8,7 @@ MM = filter(x, c(1/32, rep(1/16, 15), 1/32), sides = 2)
 MM[29]
 
 
-# Modelo Multiplicativo (estime para o 17º períod)
+# Modelo Multiplicativo (estime para o 17º período)
 mod = decompose(x, type = c("multiplicative"))
 mod
 

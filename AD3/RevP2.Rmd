@@ -6,5 +6,43 @@
 agro <- ts(c(21.4, 23.4, 24.2, 25.1, 24.6, 25.8, 24.4, 25.0, 24.3, 21.8, 21.2, 19.0, 17.7, 18.3, 17.5, 18.0, 16.5, 16.9, 16.5, 14.8, 14.3, 12.3, 11.9, 12.3, 13.0,13.1, 12.6, 12.2, 11.5, 11.7, 13.6, 11.2, 10.8, 10.9, 11.2, 9.7, 12.4, 13.8, 12.6, 12.1, 10.8, 11.4, 9.8, 8.1, 7.8, 7.7, 7.6, 9.9, 5.8, 5.5, 5.4, 5.5, 5.5,5.6, 6.0, 6.6, 7.4, 6.9, 5.7, 5.5, 5.6, 5.9, 5.6, 5.3, 5.5, 5.2), start = 1947, frequency = 1)
 
 
+# Estime a tendência para o ano de 1960 utilizando uma média móvel centrada de 6 termos
+MM = filter(agro, c(1/12, rep(1/6, 5), 1/12), sides = 2)
+
+tendencia_1960 = MM[1960 - start(agro) + 1]  # Ajustando para o índicie
+tendencia_1960  # 18.225
+``` 
+
+
+# Exercício 02 =================================================================
+
+```{r}
+### A série “voo” representa a quantidade mensal de passageiros (em milhares) em voos internacionais entre os anos de 1949 e 1960.
+voo <- ts(c(112, 118, 132, 129, 121, 135, 148, 148, 136, 119, 104, 118, 115, 126, 141, 135, 125, 149, 170, 170, 158, 133, 114, 140, 145, 150, 178, 163, 172, 178,199, 199, 184, 162, 146, 166, 171, 180, 193, 181, 183, 218, 230, 242, 209, 191, 172, 194, 196, 196, 236, 235, 229, 243, 264, 272, 237, 211, 180, 201, 204,188, 235, 227, 234, 264, 302, 293, 259, 229, 203, 229, 242, 233, 267, 269, 270, 315, 364, 347, 312, 274, 237, 278, 284, 277, 317, 313, 318, 374, 413, 405,355, 306, 271, 306, 315, 301, 356, 348, 355, 422, 465, 467, 404, 347, 305, 336, 340, 318, 362, 348, 363, 435, 491, 505, 404, 359, 310, 337, 360, 342, 406,396, 420, 472, 548, 559, 463, 407, 362, 405, 417, 391, 419, 461, 472, 535, 622, 606, 508, 461, 390, 432), start = 1949, frequency = 12)
+
+# A) Estime a tendência para o mês de maio de 1955 utilizando uma média móvel centrada de 12 
+# termos. A resposta deve conter apenas a estimativa da tendência para o período citado, caso 
+# contrário será considerada errada. 
+MM = filter(voo, c(1/24, rep(1/12, 11), 1/24), sides = 2)
+tendencia_maio55 = MM[77]  
+tendencia_maio55  # 278.5
+
+
+# B) Utilizando o modelo multiplicativo e o método de decomposição clássico baseado nas médias 
+# móveis centradas, determine as 12 constantes sazonais mensais.
+mod = decompose(voo, type = c("multiplicative"))
+mod$figure  # As 12 constantes sazonais
+
+
+# C) Ajuste um modelo de regressão linear simples à série dessazonalizada pelo método do item (b).
+t = c(1:length(voo))
+reg = lm(voo ~ t)
+coef(reg)  # Sendo Beta0 (intercept) = 87,652778 e Beta1(t) = 2,657184
+
+
+# D) Utilizando o resultado dos itens (b) e (c), determine a previsão da quantidade de passageiros 
+# (em milhares) para o mês de novembro de 1961.
+previsao = predict(reg, data.frame(t = 144))
+previsao
 ```
 
