@@ -66,6 +66,7 @@ y = ts(c(3530.1, 3971.8, 4541.1, 3893.9, 4268, 4876.9, 4170.4, 4475.8, 5058.6, 4
 # Modelo com Tendência Linear e Sazonalidade Harmônica
 t = 1:length(y)
 reg = lm(y ~ t + cos(2*pi*t/3) + sin(2*pi*t/3))
+reg
 
 coef(reg)
 

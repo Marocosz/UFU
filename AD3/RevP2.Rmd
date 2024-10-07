@@ -35,8 +35,9 @@ mod$figure  # As 12 constantes sazonais
 
 
 # C) Ajuste um modelo de regressão linear simples à série dessazonalizada pelo método do item (b).
-t = c(1:length(voo))
-reg = lm(voo ~ t)
+voo_deseason = voo - mod$seasonal
+t = c(1:length(voo_deseason))
+reg = lm(voo_deseason ~ t)
 coef(reg)  # Sendo Beta0 (intercept) = 87,652778 e Beta1(t) = 2,657184
 
 
@@ -45,4 +46,136 @@ coef(reg)  # Sendo Beta0 (intercept) = 87,652778 e Beta1(t) = 2,657184
 previsao = predict(reg, data.frame(t = 144))
 previsao
 ```
+
+# Exercício 03 =================================================================
+
+```{r}
+### A série “ovo” representa a quantidade trimestral (em milhares de dúzias) de ovos de galinha produzida no Brasil por granjas que possuem 10.000 ou mais galinhas poedeiras entre o 1º trimestre de 1987 e o 4º trimestre de 2013.
+ovo <- ts(c(288856, 292435, 301112, 294227, 295512, 307358, 305742, 304435, 290781, 303794, 311976, 317456, 296583, 310928, 317853, 315864, 318834, 331513, 338989,332725, 327831, 339666, 353127, 343064, 337138, 346857, 349115, 348077, 346444, 357960, 361277, 374078, 372915, 384648, 382530, 380976, 355143, 374322,378129, 372923, 370386, 377619, 388869, 379334, 382171, 396306, 400805, 381781, 387153, 399267, 398367, 393487, 412589, 416540, 418379, 415205, 402829,429211, 441890, 440659, 448294, 453256, 454255, 437860, 440951, 457278, 466091, 465451, 467346, 478017, 488983, 488001, 484402, 499723, 517178, 517049,516533, 522181, 540337, 533328, 527194, 537800, 544884, 556028, 559997, 568218, 576647, 576680, 580265, 580999, 598309, 601399, 603727, 610592, 622001,621557, 620103, 633902, 650814, 661901, 673166, 673352, 682833, 666125, 670500, 680807, 692740, 696273), start = 1987, frequency = 4)
+
+1:length(ovo)
+
+# Estime a tendência para o 1º trimestre de 1988 utilizando uma média móvel centrada de 8 
+# termos. A resposta deve conter apenas a estimativa da tendência para o período citado, caso 
+# contrário será considerada errada. 
+MM = filter(ovo, c(1/16, rep(1/8, 7), 1/16), sides = 2)
+tendencia_1T88 = MM[5]
+tendencia_1T88  # 298829.9
+
+
+# Utilizando o modelo aditivo e o método de decomposição clássico baseado nas médias móveis 
+# centradas, determine as 4 constantes sazonais trimestrais.
+mod = decompose(ovo)
+mod$figure
+
+
+# À série dessazonalizada pelo método do item (b), ajuste um polinômio de grau 2 do tipo
+ovo_deseason = ovo - mod$figure  # Para dessazonalizar subtraimos
+t = 1:length(ovo)
+reg = lm(ovo_deseason ~ t + I(t^2))
+coef(reg)  # T^t = 302
+
+
+# Utilizando o resultado dos itens (b) e (c), determine a previsão da quantidade de ovos (em 
+# milhares de dúzias) para o 4º trimestre de 2014
+previsao = predict(reg, newdata = data.frame(t = 112))
+previsao_final = previsao + mod$figure[4]
+previsao_final
+
+
+# Ajuste à série “ovo” um modelo com tendência quadrática (polinômio de grau 2) e 
+# sazonalidade com regressão harmônica.
+reg = lm(ovo ~ t + I(t^2) + cos(2*pi*t/4) + cos(4*pi*t/4) + sin(2*pi*t/4))
+coef(reg)
+
+
+# Utilizando o resultado do item (e), determine a previsão da quantidade de ovos (em milhares 
+# de dúzias) para o 4º trimestre de 2014.
+previsao = predict(reg, data.frame(t = 109:112))
+previsao
+
+
+# Para a série “ovo”, ajuste um modelo com tendência quadrática (polinômio de grau 2) e 
+# sazonalidade com regressão com variáveis indicadoras. Determine as 4 constantes sazonais.
+A = contr.sum(4)  # d = 4
+D = rbind (A, A, A, A, A, A, A, A, A,A, A, A, A, A, A, A, A, A,A, A, A, A, A, A, A, A, A)  # n = 27 (27 anos tamanho/periodo)
+D = data.frame(D)
+
+reg = lm(ovo ~ t + I(t^2)+ X1 + X2 + X3, data = D)
+coef(reg)
+
+-sum(coef(reg)[4:6])
+
+```
+
+# Exercício 04 =================================================================
+
+```{r}
+### Produção Trimestral de Bebida nos E.U.A. (milhões de US$)
+y<-ts(c(11654, 13723, 13242, 12002, 11502, 13627, 13662, 12155, 12024, 14378, 14070, 13049, 12491, 14861, 15115, 13610, 13318, 15962, 15832, 14554, 13609, 15995,16136, 15156, 14393, 16740, 16504, 14745, 14152, 16470, 16091, 14910, 14536, 16901, 16468, 15278, 14829, 17103, 17255, 15952, 14849, 17161, 16979, 15870,15294, 17857, 17735, 16910, 16743, 19495, 19424, 17795, 16337, 19761, 19920, 18894, 17680, 20634, 19984, 19483), start = 1992, frequency = 4)
+
+# Aplique à série uma média móvel centrada de 8 termos. Qual o valor do 10º termo desta média 
+# móvel? A resposta deve conter apenas o valor da média móvel para o período citado, caso 
+# contrário será considerada errada.
+MM = filter(y, c(1/16, rep(1/8, 7), 1/16), sides= 2)
+MM[10]
+
+
+# Utilizando o modelo multiplicativo e o método de decomposição clássico baseado nas médias 
+# móveis centradas, determine a constante sazonal do segundo trimestre. A resposta deve conter 
+# apenas o valor da constante sazonal do período citado, caso contrário será considerada errada.
+mod = decompose(y, type = c("multiplicative"))
+mod$figure[2]
+
+
+# Utilizando o modelo multiplicativo e o método de decomposição clássico baseado nas médias 
+# móveis centradas, construa a série livre de sazonalidade (dessazonalizada). Qual é o valor da 
+# série dessazonalizada para o terceiro trimestre de 1995. A resposta deve conter apenas o valor 
+# do período citado, caso contrário será considerada errada.
+deseason_mult = y/mod$figure  # se fosse pelo adititivo, subtrairimos
+deseason_mult  #  14353.12
+```
+
+# Exercício 05 =================================================================
+
+```{r}
+### Renda nacional bruta brasileira trimestral em trilhões de reais de 2010 a 2018
+y <- ts(c(0.8638625, 0.9132749, 0.9707384, 1.0238919,
+	0.9920862, 1.0625939, 1.0803405, 1.1273655,
+	1.1133829, 1.1568772, 1.2022584, 1.2400275,
+	1.2287048, 1.3126748, 1.3394971, 1.3865180,
+	1.3611805, 1.3948969, 1.4336090, 1.4748757,
+	1.4327626, 1.4514831, 1.4736331, 1.5084685,
+	1.4638448, 1.5352103, 1.5456049, 1.5918321,
+	1.5497863, 1.6036824, 1.6072394, 1.6716465,
+	1.6209117, 1.6657521, 1.6835262, 1.7535290), start = 2010, frequency = 4)
+
+# Estime a tendência para o 4º trimestre de 2011 usando uma média móvel centrada de ordem 
+# 12. A resposta deve conter apenas o valor da tendência para o período citado, caso contrário 
+# será considerada errada.
+MM = filter(y, c(1/24, rep(1/12, 11), 1/24), sides = 2)
+MM[8]  # 1.10927
+
+
+# Utilizando o modelo multiplicativo e o método de decomposição clássico baseado nas médias 
+# móveis centradas, determine a constante sazonal do 4º trimestre. A resposta deve conter 
+# apenas o valor da constante sazonal do período citado, caso contrário será considerada errada.
+mod = decompose(y, type = c("multiplicative"))
+mod$figure[4]  # 1.0192
+```
+
+# Exercício 07 =================================================================
+
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
 
