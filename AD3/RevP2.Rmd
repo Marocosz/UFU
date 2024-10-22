@@ -105,6 +105,7 @@ reg = lm(ovo ~ t + I(t^2)+ X1 + X2 + X3, data = D)
 coef(reg)
 
 -sum(coef(reg)[4:6])
+coef(reg)
 
 ```
 
@@ -169,7 +170,6 @@ mod$figure[4]  # 1.0192
 ```{r}
 
 ```
-
 
 
 
