@@ -1,0 +1,173 @@
+DROP VIEW DadosMedicos;
+DROP VIEW MedicoSetor;
+DROP TABLE Utiliza;
+DROP TABLE Trabalha;
+DROP TABLE Procedimento;
+DROP TABLE Material;
+DROP TABLE Medico;
+DROP TABLE Setor;
+
+
+
+CREATE TABLE Setor(
+	sigla VARCHAR(5),
+	nome VARCHAR(40),
+	crm INTEGER,
+	data_inicio DATE,
+	CONSTRAINT pksetor PRiMARY KEY (sigla)
+);
+
+CREATE TABLE Medico(
+	crm INTEGER,
+	cpf INTEGER,
+	telefone_res VARCHAR(15),
+	telefone_celular VARCHAR(15),
+	telefone_consultorio VARCHAR(15),
+	nome VARCHAR(40),
+	salario FLOAT,
+	rua VARCHAR(30),
+	numero INTEGER,
+	cep INTEGER,
+	cidade VARCHAR(20),
+	estado VARCHAR(2),
+	CONSTRAINT pkmedico PRIMARY KEY (crm)
+);
+
+-- integer para o cpf não permite números com 11 digitos:
+ALTER TABLE medico ALTER COLUMN cpf TYPE decimal(11);
+
+CREATE TABLE Material(
+	codmat INTEGER,
+	nacionalidade VARCHAR(20),
+	nome VARCHAR(40),
+	CONSTRAINT pkmaterial PRIMARY KEY (codmat)
+);
+
+CREATE TABLE Procedimento(
+	codproc INTEGER,
+	nome VARCHAR(40),
+	custo FLOAT,
+	sigla VARCHAR(5),
+	CONSTRAINT pkprocedimento PRIMARY KEY (codproc),
+	CONSTRAINT fkprocedimento FOREIGN KEY (sigla) REFERENCES Setor
+);
+
+CREATE TABLE Trabalha(
+	sigla VARCHAR(5),
+	crm INTEGER,
+	especialidade VARCHAR(20),
+	CONSTRAINT pkrabalha PRIMARY KEY (sigla, crm),
+	CONSTRAINT fksigla FOREIGN KEY (sigla) REFERENCES Setor,
+	CONSTRAINT fkcrm FOREIGN KEY (crm) REFERENCES Medico
+);
+
+CREATE TABLE Utiliza(
+	codproc INTEGER,
+	codmat INTEGER,
+	CONSTRAINT pkutiliza PRIMARY KEY (codproc, codmat),
+	CONSTRAINT fkcodproc FOREIGN KEY (codproc) REFERENCES Procedimento,
+	CONSTRAINT fkcodmat FOREIGN KEY (codmat) REFERENCES Material
+);
+
+INSERT INTO Setor (sigla, nome, crm, data_inicio) VALUES
+('CARD', 'Cardiologia', 101, '2020-01-15'),
+('NEUR', 'Neurologia', 102, '2019-06-10'),
+('ORTO', 'Ortopedia', 103, '2021-03-25'),
+('PED',  'Pediatria', 104, '2018-09-05'),
+('DERM', 'Dermatologia', 105, '2022-02-14');
+
+INSERT INTO Medico (crm, cpf, telefone_res, telefone_celular, telefone_consultorio, nome, salario, rua, numero, cep, cidade, estado) VALUES
+(101, 11111111111, '1122334455', '999887766', '1133445566', 'Dr. Carlos Silva', 15000.00, 'Rua A', 10, 12345678, 'São Paulo', 'SP'),
+(102, 22222222222, '1122443355', '998877665', '1133556677', 'Dra. Ana Costa', 14800.00, 'Rua B', 20, 23456789, 'Campinas', 'SP'),
+(103, 33333333333, '1133445566', '997766554', '1144667788', 'Dr. João Lima', 16000.00, 'Rua C', 30, 34567890, 'Santos', 'SP'),
+(104, 44444444444, '1144556677', '996655443', '1155778899', 'Dra. Maria Souza', 14000.00, 'Rua D', 40, 45678901, 'Ribeirão Preto', 'SP'),
+(105, 55555555555, '1155667788', '995544332', '1166889900', 'Dr. Pedro Alves', 13500.00, 'Rua E', 50, 56789012, 'Bauru', 'SP');
+
+INSERT INTO Material (codmat, nacionalidade, nome) VALUES
+(1, 'Brasil', 'Luvas Cirúrgicas'),
+(2, 'Alemanha', 'Bisturi'),
+(3, 'EUA', 'Estetoscópio'),
+(4, 'Brasil', 'Máscara N95'),
+(5, 'China', 'Termômetro Digital');
+
+INSERT INTO Procedimento (codproc, nome, custo, sigla) VALUES
+(100, 'Eletrocardiograma', 200.00, 'CARD'),
+(101, 'Ressonância Cerebral', 1500.00, 'NEUR'),
+(102, 'Raio-X Joelho', 300.00, 'ORTO'),
+(103, 'Consulta Pediátrica', 150.00, 'PED'),
+(104, 'Tratamento de Acne', 250.00, 'DERM');
+
+INSERT INTO Trabalha (sigla, crm, especialidade) VALUES
+('CARD', 101, 'Cardiologia'),
+('NEUR', 102, 'Neurologia'),
+('ORTO', 103, 'Ortopedia'),
+('PED',  104, 'Pediatria'),
+('DERM', 105, 'Dermatologia');
+
+INSERT INTO Utiliza (codproc, codmat) VALUES
+(100, 1),
+(101, 2),
+(102, 3),
+(103, 4),
+(104, 5);
+
+-- C) Visão
+CREATE VIEW MedicoSetor AS
+SELECT 
+    m.nome AS nome_medico,
+    t.especialidade,
+    t.sigla
+FROM Medico m
+JOIN Trabalha t ON m.crm = t.crm;
+
+EXPLAIN ANALYZE
+SELECT 
+    m.nome AS nome_medico,
+    t.especialidade,
+    t.sigla
+FROM Medico m
+JOIN Trabalha t ON m.crm = t.crm;
+
+EXPLAIN ANALYZE
+SELECT * FROM MedicoSetor;
+
+-- Erro, não é possível inserir dados em visões com join no postgre
+--INSERT INTO MedicoSetor (nome_medico, especialidade, sigla)
+--VALUES ('Dr. João Novo', 'Clínico Geral', 'CARD');
+
+-- D) Visão
+CREATE VIEW DadosMedicos AS
+SELECT crm, cpf, nome, salario
+FROM Medico;
+
+INSERT INTO DadosMedicos (crm, cpf, nome, salario)
+VALUES
+(201, 98765432100, 'Dr. Lucas Martins', 13000),
+(202, 87654321900, 'Dra. Helena Dias', 14500),
+(203, 76543219800, 'Dr. Thiago Mendes', 15500);
+
+-- E) 
+UPDATE DadosMedicos
+SET salario = 15800
+WHERE crm = 202;
+
+SELECT * FROM DadosMedicos WHERE crm = 202;
+SELECT crm, cpf, nome, salario FROM Medico WHERE crm = 202;
+
+
+-- F) Listar o nome dos materiais ainda não utilizados em nenhum procedimento. 
+SELECT m.nome
+FROM Material m
+LEFT JOIN Utiliza u ON m.codmat = u.codmat
+WHERE u.codmat IS NULL;
+
+
+-- G) Listar a quantidade total de médicos. 
+SELECT COUNT(*) AS total_medicos
+FROM Medico;
+
+
+-- H) Listar o nome do setor e o nome do médico responsável
+SELECT s.nome AS nome_setor, m.nome AS nome_medico_responsavel
+FROM Setor s
+JOIN Medico m ON s.crm = m.crm;

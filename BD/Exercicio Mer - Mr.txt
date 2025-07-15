@@ -1,0 +1,4 @@
+automóvel(código--, placa, DataP_Manutenção, ArCondicionado, NroPortas, Opcionais, motor)
+ônibus(código--, placa, DataP_Manutenção, ArCondicionado, NroPassageiros, Especificação TvEFrigobar)
+Carga(código--, placa, DataP_Manutenção, ArCondicionado,Capacidade Carga)
+
